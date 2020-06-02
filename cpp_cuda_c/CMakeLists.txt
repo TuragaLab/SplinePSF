@@ -5,8 +5,7 @@ project(SplinePSF LANGUAGES CXX C)
 include(CheckLanguage)
 check_language(CUDA)
 
-find_package(PythonInterp 3.6 REQUIRED)  # minimum python 3.6
-find_package(PythonLibs 3.6 REQUIRED)
+find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 REQUIRED)
 # find_package(eigen REQUIRED)  # not used atm
 find_package(CUDA)
