@@ -1,0 +1,47 @@
+package:
+  name: spline
+  version: "0.1.dev"
+
+source:
+     - path: ../../..
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - python {{ python }}
+    - cmake >=3.14
+    - ninja
+    - setuptools
+
+  host:
+    - python {{ python }}
+    - numpy {{ numpy }}
+    - pybind11 >=2.4
+    - cudatoolkit-dev # [linux]
+
+  run:
+    - {{ pin_compatible('python', max_pin='x.x') }}
+    - {{ pin_compatible('numpy', max_pin='x.x') }}
+    - cudatoolkit=10.1  # [linux]
+    - matplotlib
+    - pytest
+
+  # test:
+  #   requires:
+  #     - pytest
+  #   commands:
+  #     - pytest --pyargs deepsmlm
+
+about:
+    home: https://rieslab.de
+    # dev_url: github url 
+    # doc_url: doc url
+    # license: GPL-3.0
+    # license_family: GPL
+    # license_file: {{ SRC_DIR }}/LICENSE
+    summary: "Spline PSF Implementation"
+    description: "Tbd."
