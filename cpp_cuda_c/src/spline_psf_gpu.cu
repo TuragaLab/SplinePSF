@@ -90,6 +90,13 @@ namespace spline_psf_gpu {
         cudaMalloc(&d_sp, sizeof(spline));
         cudaMemcpy(d_sp, sp, sizeof(spline), cudaMemcpyHostToDevice);
 
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) {
+            std::stringstream rt_err;
+            rt_err << "Error during allocation of spline struct on device.\nCode: "<< err << "\nInformation: \n" << cudaGetErrorString(err);
+            throw std::runtime_error(rt_err.str());
+        }
+
         return d_sp;
     }
 
