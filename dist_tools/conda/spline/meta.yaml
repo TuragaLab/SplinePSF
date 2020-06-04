@@ -6,7 +6,7 @@ source:
      - path: ../../..
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
@@ -26,7 +26,7 @@ requirements:
   run:
     - {{ pin_compatible('python', max_pin='x.x') }}
     - {{ pin_compatible('numpy', max_pin='x.x') }}
-    - cudatoolkit=10.1  # [linux]
+    # - cudatoolkit=10.1  # [linux]
     - matplotlib
     - pytest
 
