@@ -6,7 +6,7 @@ wrapper for Python / MATLAB; this is also the reason why we opted of a separate 
 ## Installation
 
 ```
-conda install -c haydnspass spline
+conda install -c haydnspass -c conda-forge spline
 ```
 
 ### Known Limitations
