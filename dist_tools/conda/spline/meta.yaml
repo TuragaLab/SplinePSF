@@ -12,19 +12,19 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - python {{ python }}
-    - cmake >=3.14
+    - python
+    - cmake >=3.15
     - ninja
     - setuptools
 
   host:
-    - python {{ python }}
+    - python
     - numpy {{ numpy }}
     - pybind11 >=2.4
     - cudatoolkit-dev # [linux]
 
   run:
-    - {{ pin_compatible('python', max_pin='x.x') }}
+    - python
     - {{ pin_compatible('numpy', max_pin='x.x') }}
     # - cudatoolkit=10.1  # [linux]
 
