@@ -34,15 +34,17 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
+        env = os.environ.copy()
+        py_ver = ".".join(env["PY_VER"].split())
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
         # self.debug = True
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         cmake_args = ['-DCMAKE_BUILD_TYPE=' + cfg]
         cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir]
+        cmake_args += [f'-DPYBIND11_PYTHON_VERSION={py_ver}']
         cmake_args += ["-GNinja"]
 
-        env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
         if not os.path.exists(self.build_temp):
