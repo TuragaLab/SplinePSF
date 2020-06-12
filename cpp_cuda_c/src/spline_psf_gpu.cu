@@ -309,9 +309,9 @@ auto forward_rois(spline *d_sp, float *d_rois, const int n, const int roi_size_x
     cudaError_t err = cudaSuccess;
 
     // throw error if roi size is too big
-    if ((roi_size_x > 32) || (roi_size_y > 32)) {
-        throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
-    }
+    // if ((roi_size_x > 32) || (roi_size_y > 32)) {
+    //     throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
+    // }
 
     // start n blocks which itself start threads corresponding to the number of px childs (dynamic parallelism)
     kernel_roi<<<n, 1>>>(d_sp, d_rois, roi_size_x, roi_size_y, d_x, d_y, d_z, d_phot);
@@ -334,9 +334,9 @@ auto forward_drv_rois(spline *d_sp, float *d_rois, float *d_drv_rois, const int 
     cudaError_t err = cudaSuccess;
 
     // throw error if roi size is too big
-    if ((roi_size_x > 32) || (roi_size_y > 32)) {
-        throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
-    }
+    // if ((roi_size_x > 32) || (roi_size_y > 32)) {
+    //     throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
+    // }
 
     // start n blocks which itself start threads corresponding to the number of px childs (dynamic parallelism)
     kernel_derivative_roi<<<n, 1>>>(d_sp, d_rois, d_drv_rois, roi_size_x, roi_size_y, d_x, d_y, d_z, d_phot, d_bg, add_bg);
@@ -408,6 +408,11 @@ auto fAt3Dj(spline *sp, float* rois, const int roi_ix, const int npx, const int 
     int i = (blockIdx.x * blockDim.x + threadIdx.x) / npx;
     int j = (blockIdx.x * blockDim.x + threadIdx.x) % npx;
 
+    // excess threads
+    if ((i >= npx) || (j >= npy)) {
+        return;
+    }
+
      // allocate space for df, dxf, dyf, dzf
     __shared__ float delta_f[64];
     __shared__ float dxf[64];
@@ -476,7 +481,9 @@ auto kernel_roi(spline *sp, float *rois, const int npx, const int npy, const flo
     z0 = (int)floor(zc);
     z_delta = zc - z0;
 
-    fAt3Dj<<<1, npx * npy>>>(sp, rois, r, npx, npy, x0, y0, z0, phot, x_delta, y_delta, z_delta);
+    int n_blocks = (int)ceil((float)(npx * npy / 1024));  // max number of threads per block
+
+    fAt3Dj<<<n_blocks, npx * npy>>>(sp, rois, r, npx, npy, x0, y0, z0, phot, x_delta, y_delta, z_delta);
 
     return;
 }
@@ -517,6 +524,11 @@ auto kernel_derivative(spline *sp, float *rois, float *drv_rois, const int roi_i
 
     int i = (blockIdx.x * blockDim.x + threadIdx.x) / npx;
     int j = (blockIdx.x * blockDim.x + threadIdx.x) % npx;
+
+    // excess threads
+    if ((i >= npx) || (j >= npy)) {
+        return;
+    }
 
      // allocate space for df, dxf, dyf, dzf
     __shared__ float delta_f[64];
