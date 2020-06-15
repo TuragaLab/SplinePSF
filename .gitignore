@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Build folders
+build/ 
+python/build/
+
+# Compiled Python stuff
+*.egg-info
+*.egg
