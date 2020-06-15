@@ -405,13 +405,8 @@ __global__
 auto fAt3Dj(spline *sp, float* rois, const int roi_ix, const int npx, const int npy,
     int xc, int yc, int zc, float phot, float x_delta, float y_delta, float z_delta) -> void {
     
-    int i = (blockIdx.x * blockDim.x + threadIdx.x) / npx;
-    int j = (blockIdx.x * blockDim.x + threadIdx.x) % npx;
-
-    // excess threads
-    if ((i >= npx) || (j >= npy)) {
-        return;
-    }
+    const int i = (blockIdx.x * blockDim.x + threadIdx.x) / npx;
+    const int j = (blockIdx.x * blockDim.x + threadIdx.x) % npx;
 
      // allocate space for df, dxf, dyf, dzf
     __shared__ float delta_f[64];
@@ -419,7 +414,9 @@ auto fAt3Dj(spline *sp, float* rois, const int roi_ix, const int npx, const int 
     __shared__ float dyf[64];
     __shared__ float dzf[64];
 
-    if (i == 0 and j == 0) {
+    // term common to all pixels, must be executed at least once per kernel block (since sync only syncs within block)
+    // if (i == 0 and j == 0) {
+    if (threadIdx.x == 0) {
 
         for (int k = 0; k < 64; k++) {
             delta_f[k] = 0.0;
@@ -431,7 +428,13 @@ auto fAt3Dj(spline *sp, float* rois, const int roi_ix, const int npx, const int 
         // This is different to the C library since we needed to rearrange a bit to account for the GPU parallelism
         kernel_computeDelta3D(sp, delta_f, dxf, dyf, dzf, x_delta, y_delta, z_delta);
     }
-    __syncthreads();  // wait so that all threads see the deltas
+
+    __syncthreads();  // wait so that all threads see the deltas. REMINDER: only works for within block
+
+    // kill excess threads (I think it needs to happen after syncthreads)
+    if ((i >= npx) || (j >= npy)) {
+        return;
+    }
 
     xc = xc + i;
     yc = yc + j;
@@ -481,9 +484,10 @@ auto kernel_roi(spline *sp, float *rois, const int npx, const int npy, const flo
     z0 = (int)floor(zc);
     z_delta = zc - z0;
 
-    int n_blocks = (int)ceil((float)(npx * npy / 1024));  // max number of threads per block
+    int n_threads = min(1024, npx * npy);  // max number of threads per block
+    int n_blocks = ceil(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
 
-    fAt3Dj<<<n_blocks, npx * npy>>>(sp, rois, r, npx, npy, x0, y0, z0, phot, x_delta, y_delta, z_delta);
+    fAt3Dj<<<n_blocks, n_threads>>>(sp, rois, r, npx, npy, x0, y0, z0, phot, x_delta, y_delta, z_delta);
 
     return;
 }
@@ -513,7 +517,10 @@ auto kernel_derivative_roi(spline *sp, float *rois, float *drv_rois, const int n
     z0 = (int)floor(zc);
     z_delta = zc - z0;
 
-    kernel_derivative<<<1, npx * npy>>>(sp, rois, drv_rois, r, npx, npy, x0, y0, z0, phot, bg, x_delta, y_delta, z_delta, add_bg);
+    int n_threads = min(1024, npx * npy);  // max number of threads per block
+    int n_blocks = ceil(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
+
+    kernel_derivative<<<n_blocks, n_threads>>>(sp, rois, drv_rois, r, npx, npy, x0, y0, z0, phot, bg, x_delta, y_delta, z_delta, add_bg);
 
     return;
 }
@@ -525,11 +532,6 @@ auto kernel_derivative(spline *sp, float *rois, float *drv_rois, const int roi_i
     int i = (blockIdx.x * blockDim.x + threadIdx.x) / npx;
     int j = (blockIdx.x * blockDim.x + threadIdx.x) % npx;
 
-    // excess threads
-    if ((i >= npx) || (j >= npy)) {
-        return;
-    }
-
      // allocate space for df, dxf, dyf, dzf
     __shared__ float delta_f[64];
     __shared__ float dxf[64];
@@ -538,7 +540,9 @@ auto kernel_derivative(spline *sp, float *rois, float *drv_rois, const int roi_i
 
     float dudt[5] = { 0 };  // derivatives in this very pixel
 
-    if (i == 0 and j == 0) {
+    // term common to all pixels, must be executed at least once per kernel block (since sync only syncs within block)
+    // if (i == 0 and j == 0) {
+    if (threadIdx.x == 0) {
 
         for (int k = 0; k < 64; k++) {
             delta_f[k] = 0.0;
@@ -551,6 +555,11 @@ auto kernel_derivative(spline *sp, float *rois, float *drv_rois, const int roi_i
         kernel_computeDelta3D(sp, delta_f, dxf, dyf, dzf, x_delta, y_delta, z_delta);
     }
     __syncthreads();  // wait so that all threads see the deltas
+
+    // kill excess threads
+    if ((i >= npx) || (j >= npy)) {
+        return;
+    }
 
     // let each thread go to their respective pixel
     xc = xc + i;
