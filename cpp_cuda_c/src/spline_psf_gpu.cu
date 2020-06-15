@@ -308,11 +308,6 @@ auto forward_rois(spline *d_sp, float *d_rois, const int n, const int roi_size_x
     // init cuda_err
     cudaError_t err = cudaSuccess;
 
-    // throw error if roi size is too big
-    // if ((roi_size_x > 32) || (roi_size_y > 32)) {
-    //     throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
-    // }
-
     // start n blocks which itself start threads corresponding to the number of px childs (dynamic parallelism)
     kernel_roi<<<n, 1>>>(d_sp, d_rois, roi_size_x, roi_size_y, d_x, d_y, d_z, d_phot);
     cudaDeviceSynchronize();
@@ -332,11 +327,6 @@ auto forward_drv_rois(spline *d_sp, float *d_rois, float *d_drv_rois, const int 
     
     // init cuda_err
     cudaError_t err = cudaSuccess;
-
-    // throw error if roi size is too big
-    // if ((roi_size_x > 32) || (roi_size_y > 32)) {
-    //     throw std::invalid_argument("ROI size (per PSF) must not exceed 32 pixels.");
-    // }
 
     // start n blocks which itself start threads corresponding to the number of px childs (dynamic parallelism)
     kernel_derivative_roi<<<n, 1>>>(d_sp, d_rois, d_drv_rois, roi_size_x, roi_size_y, d_x, d_y, d_z, d_phot, d_bg, add_bg);
@@ -415,7 +405,7 @@ auto fAt3Dj(spline *sp, float* rois, const int roi_ix, const int npx, const int 
     __shared__ float dzf[64];
 
     // term common to all pixels, must be executed at least once per kernel block (since sync only syncs within block)
-    // if (i == 0 and j == 0) {
+    // if (i == 0 and j == 0) {  // linear / C++ equivalent
     if (threadIdx.x == 0) {
 
         for (int k = 0; k < 64; k++) {
@@ -541,7 +531,7 @@ auto kernel_derivative(spline *sp, float *rois, float *drv_rois, const int roi_i
     float dudt[5] = { 0 };  // derivatives in this very pixel
 
     // term common to all pixels, must be executed at least once per kernel block (since sync only syncs within block)
-    // if (i == 0 and j == 0) {
+    // if (i == 0 and j == 0) {  // linear / C++ equivalent
     if (threadIdx.x == 0) {
 
         for (int k = 0; k < 64; k++) {
