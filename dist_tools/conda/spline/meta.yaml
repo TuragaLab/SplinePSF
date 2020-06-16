@@ -6,7 +6,7 @@ source:
      - path: ../../..
 
 build:
-  number: 3
+  number: 4
 
 requirements:
   build:
@@ -41,5 +41,5 @@ about:
     # license: GPL-3.0
     # license_family: GPL
     # license_file: {{ SRC_DIR }}/LICENSE
-    summary: "Spline PSF Implementation"
+    summary: "Cubic Spline PSF Implementation"
     description: "Tbd."
