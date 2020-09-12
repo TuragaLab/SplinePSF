@@ -22,6 +22,6 @@ conda create --name build_clean conda-build
 conda activate build_clean
 
 # navigate to [repo]/conda
-cd conda
+cd dist_tools/conda
 conda-build -c conda-forge spline
 ```
