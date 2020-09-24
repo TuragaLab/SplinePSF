@@ -69,7 +69,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     url='',
-    license='',
+    license='GPL3',
     author='Lucas-Raphael Mueller',
     author_email='',
     description=''
