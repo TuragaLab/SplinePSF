@@ -1,0 +1,11 @@
+name: pip-build
+channels:
+  - conda-forge
+dependencies:
+  - python=3.6
+  - cmake >=3.15
+  - ninja
+  - setuptools
+  - numpy
+  - pybind11 >=2.4
+  - cudatoolkit-dev
