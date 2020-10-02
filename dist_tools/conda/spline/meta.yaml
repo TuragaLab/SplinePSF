@@ -1,12 +1,12 @@
 package:
   name: spline
-  version: "0.1.dev"
+  version: "0.9.a"
 
 source:
      - path: ../../..
 
 build:
-  number: 4
+  number: 1
 
 requirements:
   build:
