@@ -60,10 +60,14 @@ auto roi_accumulate(float *frames, const int frame_size_x, const int frame_size_
 namespace spline_psf_gpu {
 
     // check cuda availability by device count
-    auto cuda_is_available() -> bool {
+    auto cuda_is_available(void) -> bool {
 
-        int d_count;
-        cudaGetDeviceCount(&d_count);
+        int d_count = 0;
+        cudaError_t err = cudaGetDeviceCount(&d_count);
+
+        if (err != cudaSuccess) {
+            return false;
+        }
 
         if (d_count >= 1) {
             return true;
