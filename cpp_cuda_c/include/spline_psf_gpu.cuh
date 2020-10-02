@@ -31,6 +31,11 @@ namespace spline_psf_gpu {
 
     } spline;
 
+    // Check cuda is available
+    // Returns:
+    //      bool: is available
+    auto cuda_is_available() -> bool;
+
 
     // Initialisation of Spline Coefficients on Device
     // Args:

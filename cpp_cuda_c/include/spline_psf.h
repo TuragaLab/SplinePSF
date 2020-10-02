@@ -31,6 +31,7 @@ typedef struct {
     float *coeff;  // coefficients
 } spline;
 
+
 /// Initialises spline struct
 ///
 /// \param [in] coeff: spline coefficients

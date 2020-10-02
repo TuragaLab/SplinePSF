@@ -59,6 +59,19 @@ auto roi_accumulate(float *frames, const int frame_size_x, const int frame_size_
 
 namespace spline_psf_gpu {
 
+    // check cuda availability by device count
+    auto cuda_is_available() -> bool {
+
+        int d_count;
+        cudaGetDeviceCount(&d_count);
+
+        if (d_count >= 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     // Create struct and ship it to device
     auto d_spline_init(const float *h_coeff, int xsize, int ysize, int zsize) -> spline* {
 

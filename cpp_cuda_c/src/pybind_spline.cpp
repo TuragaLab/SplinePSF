@@ -27,10 +27,6 @@ namespace py = pybind11;
 template<typename T>
 class PSFWrapperBase {
 
-public:
-
-    bool cuda_is_available = false;
-
 protected:
 
     T *psf;
@@ -55,7 +51,6 @@ class PSFWrapperCUDA : public PSFWrapperBase<spg::spline> {
             py::array_t<float, py::array::f_style | py::array::forcecast> coeff) : PSFWrapperBase{roi_size_x_, roi_size_y_} {
 
                 psf = spg::d_spline_init(coeff.data(), coeff_xsize, coeff_ysize, coeff_zsize);
-                cuda_is_available = true;
 
             }
 
@@ -139,9 +134,6 @@ public:
             roi_size_x_, roi_size_y_} {
 
         psf = spc::initSpline(coeff.data(), coeff_xsize, coeff_ysize, coeff_zsize);
-#if CUDA_ENABLED
-        cuda_is_available = true;
-#endif  // CUDA_ENABLED
 
     }
 
@@ -210,7 +202,6 @@ public:
 PYBIND11_MODULE(spline, m) {
     py::class_<PSFWrapperCPU>(m, "PSFWrapperCPU")
             .def(py::init<int, int, int, int, int, py::array_t<float>>())
-            .def_readonly("cuda_is_available", &PSFWrapperCPU::cuda_is_available)
             .def("forward_rois", &PSFWrapperCPU::forward_rois)
             .def("forward_drv_rois", &PSFWrapperCPU::forward_drv_rois)
             .def("forward_frames", &PSFWrapperCPU::forward_frames);
@@ -218,14 +209,19 @@ PYBIND11_MODULE(spline, m) {
 #if CUDA_ENABLED
     py::class_<PSFWrapperCUDA>(m, "PSFWrapperCUDA")
         .def(py::init<int, int, int, int, int, py::array_t<float>>())
-        .def_readonly("cuda_is_available", &PSFWrapperCUDA::cuda_is_available)
         .def("forward_rois", &PSFWrapperCUDA::forward_rois)
         .def("forward_drv_rois", &PSFWrapperCUDA::forward_drv_rois)
         .def("forward_frames", &PSFWrapperCUDA::forward_frames);
 
+    m.attr("cuda_compiled") = true;
+    m.attr("cuda_is_available") = spg::cuda_is_available();
+
 #else  // make PSFWrapperCUDA dummy class that throws an error
     py::class_<PSFWrapperCUDA>(m, "PSFWrapperCUDA")
             .def(py::init<int, int, int, int, int, py::array_t<float>>());
+
+    m.attr("cuda_compiled") = false;
+    m.attr("cuda_is_available") = false;
 
 #endif  // CUDA_ENABLED
 }
