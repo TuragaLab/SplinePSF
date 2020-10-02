@@ -214,14 +214,14 @@ PYBIND11_MODULE(spline, m) {
         .def("forward_frames", &PSFWrapperCUDA::forward_frames);
 
     m.attr("cuda_compiled") = true;
-    m.attr("cuda_is_available") = spg::cuda_is_available();
+    m.def("cuda_is_available", &spg::cuda_is_available, "Check CUDA availability of spline implementatio (this can be different from cuda_compiled).");
 
 #else  // make PSFWrapperCUDA dummy class that throws an error
     py::class_<PSFWrapperCUDA>(m, "PSFWrapperCUDA")
             .def(py::init<int, int, int, int, int, py::array_t<float>>());
 
     m.attr("cuda_compiled") = false;
-    m.attr("cuda_is_available") = false;
+    m.def("cuda_is_available", [](void) {return false;}, "Check CUDA availability of spline implementatio (this can be different from cuda_compiled).");  // always false if not even cuda compiled
 
 #endif  // CUDA_ENABLED
 }
