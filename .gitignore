@@ -34,6 +34,7 @@
 # Build folders
 build/ 
 python/build/
+dist/
 
 # Compiled Python stuff
 *.egg-info

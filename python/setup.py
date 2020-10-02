@@ -35,7 +35,14 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, ext):
         env = os.environ.copy()
-        py_ver = ".".join(env["PY_VER"].split())
+        if "PY_VER" in env:
+            # conda build
+            py_ver = ".".join(env["PY_VER"].split())
+        else: 
+            # pip build
+            import sys
+            py_ver = sys.version[:3]
+
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
         # self.debug = True
         cfg = 'Debug' if self.debug else 'Release'
@@ -55,14 +62,14 @@ class CMakeBuild(build_ext):
 
 setup(
     name='spline',
-    version='0.1.dev0',
+    version='0.9.1dev',
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension('spline', '../cpp_cuda_c')],
     cmdclass=dict(build_ext=CMakeBuild),
     include_package_data=True,
     zip_safe=False,
     url='',
-    license='',
+    license='GPL3',
     author='Lucas-Raphael Mueller',
     author_email='',
     description=''
