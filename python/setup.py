@@ -35,11 +35,11 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, ext):
         env = os.environ.copy()
-        if "PY_VER" in env:
-            # conda build
+        if "CONDA_BUILD" in env:
+            # conda build has this variable available
             py_ver = ".".join(env["PY_VER"].split())
         else: 
-            # pip build
+            # pip build does not
             import sys
             py_ver = sys.version[:3]
 
