@@ -1,6 +1,6 @@
 package:
   name: spline
-  version: "0.9.a"
+  version: "0.9.1"
 
 source:
      - path: ../../..
