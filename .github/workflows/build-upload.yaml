@@ -36,6 +36,7 @@ jobs:
     
     - name: Install conda build libraries
       run: |
+        echo $CONDA
         $CONDA/bin/conda install conda-build anaconda-client
     
     - name: Build SplinePSF
