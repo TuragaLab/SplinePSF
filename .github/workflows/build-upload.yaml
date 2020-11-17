@@ -5,8 +5,27 @@ name: Build SplinePSF and upload to Anaconda Cloud
 on: [push]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  # build-linux:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Python 3.8
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.8
+    
+  #   - name: Install conda build libraries
+  #     run: |
+  #       $CONDA/bin/conda install conda-build anaconda-client
+    
+  #   - name: Build SplinePSF
+  #     run: |
+  #       cd ./dist_tools/conda
+  #       $CONDA/bin/conda-build -c conda-forge spline
+
+  build-macos:
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +43,6 @@ jobs:
         cd ./dist_tools/conda
         $CONDA/bin/conda-build -c conda-forge spline
 
-    # need to test this part and see if it builds in their env
 
 
     
