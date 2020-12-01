@@ -40,6 +40,7 @@ jobs:
       #   $CONDA/bin/conda install conda-build anaconda-client
 
       # try using a new env instead of base env to avoid perms issue
+      shell: bash -l {0}
       run: |
         $CONDA/bin/conda create --name build_clean conda-build anaconda-client
         source $CONDA/bin/conda activate build_clean
