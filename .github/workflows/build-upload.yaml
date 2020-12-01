@@ -34,24 +34,27 @@ jobs:
       with:
         python-version: 3.8
     
-    - name: Install conda build libraries
+    # - name: Install conda build libraries
       # fails here; conda permissions issue with these two lines:
+      # this shell line might also be needed?
+      # shell: bash -l {0}
       # run: |
       #   $CONDA/bin/conda install conda-build anaconda-client
 
-      # try using a new env instead of base env to avoid perms issue
-      # this line might be needed?
+    # try using a third party action for conda setup
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.8
+    - name: Install conda build libraries
       shell: bash -l {0}
       run: |
-        $CONDA/bin/conda create --name build_clean conda-build anaconda-client
-        source $CONDA/bin/conda activate build_clean
+        conda install conda-build anaconda-client
+
+    - name: Build SplinePSF
+      run: |
         cd ./dist_tools/conda
-        $CONDA/bin/conda-build -c conda-forge spline
-    
-    # - name: Build SplinePSF
-    #   run: |
-    #     cd ./dist_tools/conda
-    #     $CONDA/bin/conda-build -c conda-forge spline
+        conda-build -c conda-forge spline
 
 
 
