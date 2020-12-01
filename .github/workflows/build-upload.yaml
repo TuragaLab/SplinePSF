@@ -52,6 +52,7 @@ jobs:
         conda install conda-build anaconda-client
 
     - name: Build SplinePSF
+      shell: bash -l {0}
       run: |
         cd ./dist_tools/conda
         conda-build -c conda-forge spline
