@@ -55,8 +55,6 @@ jobs:
   #       conda-build -c conda-forge spline
 
 
-
-  Windows build in progress, barely started:
   build-windows:
     runs-on: windows-latest
 
