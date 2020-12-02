@@ -72,8 +72,8 @@ jobs:
       # see if I can figure out the built-in
       shell: powershell
       run: |
-        (Get-Command conda).Path
-        conda info
+        $CONDA
+        $CONDA info
 
 
 
