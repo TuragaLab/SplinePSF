@@ -16,6 +16,7 @@ jobs:
   #       python-version: 3.8
     
   #   - name: Install conda build libraries
+  #     # for Linux, we can use the provided conda
   #     run: |
   #       $CONDA/bin/conda install conda-build anaconda-client
     
@@ -24,8 +25,40 @@ jobs:
   #       cd ./dist_tools/conda
   #       $CONDA/bin/conda-build -c conda-forge spline
 
-  build-macos:
-    runs-on: macos-latest
+  # build-macos:
+  #   runs-on: macos-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Python 3.8
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.8
+
+  #   - uses: conda-incubator/setup-miniconda@v2
+  #     # for Mac, the built-in conda has permissions issues; 
+  #     #   we use a third-party action instead; note we need to
+  #     #   use the "bash -l {0}" shell to ensure login files are run
+  #     #   so conda env vars will be set
+  #     with:
+  #       auto-update-conda: true
+  #       python-version: 3.8
+  #   - name: Install conda build libraries
+  #     shell: bash -l {0}
+  #     run: |
+  #       conda install conda-build anaconda-client
+
+  #   - name: Build SplinePSF
+  #     shell: bash -l {0}
+  #     run: |
+  #       cd ./dist_tools/conda
+  #       conda-build -c conda-forge spline
+
+
+
+  Windows build in progress, barely started:
+  build-windows:
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -34,54 +67,28 @@ jobs:
       with:
         python-version: 3.8
     
-    # - name: Install conda build libraries
-      # fails here; conda permissions issue with these two lines:
-      # this shell line might also be needed?
-      # shell: bash -l {0}
+    - name: Install conda build libraries
+      # starting from scratch...I want to use Powershell because it's the default,
+      #   but I need to experiment with it
+
+      # see if I can figure out the built-in
+      shell: powershell
+      run: |
+        (Get-Command conda).Path
+        conda info
+
+
+
+      # this not updated yet
+
       # run: |
       #   $CONDA/bin/conda install conda-build anaconda-client
-
-    # try using a third party action for conda setup
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        auto-update-conda: true
-        python-version: 3.8
-    - name: Install conda build libraries
-      shell: bash -l {0}
-      run: |
-        conda install conda-build anaconda-client
-
-    - name: Build SplinePSF
-      shell: bash -l {0}
-      run: |
-        cd ./dist_tools/conda
-        conda-build -c conda-forge spline
-
-
-
-  # Windows build in progress, barely started:
-  # build-windows:
-  #   runs-on: windows-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Python 3.8
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
+      # shell: cmd
     
-  #   - name: Install conda build libraries
-
-  #     # this not updated yet
-
-  #     run: |
-  #       $CONDA/bin/conda install conda-build anaconda-client
-  #     shell: cmd
-    
-  #   - name: Build SplinePSF
-  #     run: |
-  #       cd ./dist_tools/conda
-  #       $CONDA/bin/conda-build -c conda-forge spline
+    # - name: Build SplinePSF
+    #   run: |
+    #     cd ./dist_tools/conda
+    #     $CONDA/bin/conda-build -c conda-forge spline
 
 
     
