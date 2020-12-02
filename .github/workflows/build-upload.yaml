@@ -72,8 +72,8 @@ jobs:
       # see if I can figure out the built-in
       shell: powershell
       run: |
-        $CONDA
-        $CONDA info
+        Get-Variable
+        conda info
 
 
 
