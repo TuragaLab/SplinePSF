@@ -76,12 +76,11 @@ jobs:
       run: |
         conda install conda-build anaconda-client
 
-
-    
-    # - name: Build SplinePSF
-    #   run: |
-    #     cd ./dist_tools/conda
-    #     $CONDA/bin/conda-build -c conda-forge spline
+    - name: Build SplinePSF
+      shell: powershell
+      run: |
+        Set-Location -Path .\dist_tools\conda
+        conda-build -c conda-forge spline
 
 
     
