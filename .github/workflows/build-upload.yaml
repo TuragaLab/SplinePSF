@@ -65,23 +65,18 @@ jobs:
       with:
         python-version: 3.8
     
-    - name: Install conda build libraries
-      # starting from scratch...I want to use Powershell because it's the default,
-      #   but I need to experiment with it
+    - uses: conda-incubator/setup-miniconda@v2
+      # as with Mac, easier to use the third-party setup
+      with:
+        auto-update-conda: true
+        python-version: 3.8
 
-      # see if I can figure out the built-in
+    - name: Install conda build libraries
       shell: powershell
       run: |
-        Get-Variable
-        conda info
+        conda install conda-build anaconda-client
 
 
-
-      # this not updated yet
-
-      # run: |
-      #   $CONDA/bin/conda install conda-build anaconda-client
-      # shell: cmd
     
     # - name: Build SplinePSF
     #   run: |
