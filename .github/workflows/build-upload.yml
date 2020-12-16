@@ -41,56 +41,48 @@ jobs:
   #       done < $FILENAMES
 
   # --------------- Mac ---------------
-  build-macos:
-    runs-on: macos-latest
+  # build-macos:
+  #   runs-on: macos-latest
 
-    env: 
-        FILENAMES: temp-filenames.txt
+  #   env: 
+  #       FILENAMES: temp-filenames.txt
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Python 3.8
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.8
 
-    - uses: conda-incubator/setup-miniconda@v2
-      # for Mac, the built-in conda has permissions issues; 
-      #   we use a third-party action instead; note we need to
-      #   use the "bash -l {0}" shell to ensure login files are run
-      #   so conda env vars will be set
-      with:
-        auto-update-conda: true
-        python-version: 3.8
-    - name: Install conda build libraries
-      shell: bash -l {0}
-      run: |
-        conda install conda-build anaconda-client
+  #   - uses: conda-incubator/setup-miniconda@v2
+  #     # for Mac, the built-in conda has permissions issues; 
+  #     #   we use a third-party action instead; note we need to
+  #     #   use the "bash -l {0}" shell to ensure login files are run
+  #     #   so conda env vars will be set
+  #     with:
+  #       auto-update-conda: true
+  #       python-version: 3.8
+  #   - name: Install conda build libraries
+  #     shell: bash -l {0}
+  #     run: |
+  #       conda install conda-build anaconda-client
 
-    - name: Build SplinePSF
-      shell: bash -l {0}
-      run: |
-        cd ./dist_tools/conda
-        conda-build -c conda-forge spline --output > $FILENAMES
-      # run: |
-      #   cd ./dist_tools/conda
-      #   conda-build -c conda-forge spline
-      #   conda-build -c conda-forge spline --output > $FILENAMES
+  #   - name: Build SplinePSF
+  #     shell: bash -l {0}
+  #     run: |
+  #       cd ./dist_tools/conda
+  #       conda-build -c conda-forge spline
+  #       conda-build -c conda-forge spline --output > $FILENAMES
 
-    - name: Upload to Anaconda Cloud
-      env:
-        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-      shell: bash -l {0}
-      run: |
-        cd ./dist_tools/conda
-        while read PATH; do 
-          echo $CONDA/bin/anaconda -t token upload -u Turagalab $PATH
-        done < $FILENAMES
-      # run: |
-      #   cd ./conda
-      #   while read PATH; do 
-      #     $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
-      #   done < $FILENAMES
+  #   - name: Upload to Anaconda Cloud
+  #     env:
+  #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+  #     shell: bash -l {0}
+  #     run: |
+  #       cd ./conda
+  #       while read PATH; do 
+  #         $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+  #       done < $FILENAMES
 
   # --------------- Windows ---------------
   build-windows:
@@ -122,6 +114,8 @@ jobs:
       run: |
         Set-Location -Path .\dist_tools\conda
         conda-build -c conda-forge spline --output > $FILENAMES
+        Get-ChildItem
+        type $FILENAMES
       # run: |
       #   Set-Location -Path .\dist_tools\conda
       #   conda-build -c conda-forge spline
@@ -133,6 +127,9 @@ jobs:
       shell: powershell
       run: |
         Set-Location -Path .\dist_tools\conda
+        Write-Host $FILENAMES
+        Get-ChildItem
+        type $FILENAMES
         foreach($PATH in Get-Content -path $FILENAMES) {
           Write-Host anaconda -t token upload -u Turagalab $PATH
         }
