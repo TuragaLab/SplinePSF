@@ -113,7 +113,10 @@ jobs:
       shell: powershell
       run: |
         Set-Location -Path .\dist_tools\conda
+        Write-Host $FILENAMES
+        conda-build -c conda-forge spline
         conda-build -c conda-forge spline --output > $FILENAMES
+        Write-Host $FILENAMES
         Get-ChildItem
         type $FILENAMES
       # run: |
