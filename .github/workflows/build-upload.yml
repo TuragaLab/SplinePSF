@@ -95,8 +95,6 @@ jobs:
   build-windows:
     runs-on: windows-latest
 
-    # I couldn't figure out how to make the variables work in powershell,
-    #   so the temp filename is hardcoded in this job
     env: 
       FILENAMES: temp-filenames.txt
 
