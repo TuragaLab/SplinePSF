@@ -97,7 +97,8 @@ jobs:
 
     # I couldn't figure out how to make the variables work in powershell,
     #   so the temp filename is hardcoded in this job
-    # env: (none)
+    env: 
+      FILENAMES: temp-filenames.txt
 
     steps:
     - uses: actions/checkout@v2
@@ -126,7 +127,7 @@ jobs:
       run: |
         Set-Location -Path .\dist_tools\conda
         conda-build -c conda-forge spline
-        conda-build -c conda-forge spline --output > .\temp-filenames.txt
+        conda-build -c conda-forge spline --output > $Env:FILENAMES
 
     - name: Upload to Anaconda Cloud
       env:
@@ -135,7 +136,7 @@ jobs:
       run: |
         Set-PSDebug -Trace 2
         Set-Location -Path .\dist_tools\conda
-        foreach($PATH in Get-Content -path .\temp-filenames.txt) {
-          anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+        foreach($PATH in Get-Content -path $Env:FILENAMES) {
+          anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
         }
     
