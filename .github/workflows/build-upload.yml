@@ -113,12 +113,9 @@ jobs:
       shell: powershell
       run: |
         Set-Location -Path .\dist_tools\conda
-        Write-Host $FILENAMES
-        conda-build -c conda-forge spline
-        conda-build -c conda-forge spline --output > $FILENAMES
-        Write-Host $FILENAMES
+        conda-build -c conda-forge spline --output > .\temp-filenames.txt
+        Write-Host "ls after --output"
         Get-ChildItem
-        type $FILENAMES
       # run: |
       #   Set-Location -Path .\dist_tools\conda
       #   conda-build -c conda-forge spline
@@ -130,10 +127,9 @@ jobs:
       shell: powershell
       run: |
         Set-Location -Path .\dist_tools\conda
-        Write-Host $FILENAMES
+        Write-Host "ls before loop"
         Get-ChildItem
-        type $FILENAMES
-        foreach($PATH in Get-Content -path $FILENAMES) {
+        foreach($PATH in Get-Content -path $.\temp-filenames.txt) {
           Write-Host anaconda -t token upload -u Turagalab $PATH
         }
       # run: |
