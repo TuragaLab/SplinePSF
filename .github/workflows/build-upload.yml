@@ -129,7 +129,7 @@ jobs:
         Set-Location -Path .\dist_tools\conda
         Write-Host "ls before loop"
         Get-ChildItem
-        foreach($PATH in Get-Content -path $.\temp-filenames.txt) {
+        foreach($PATH in Get-Content -path .\temp-filenames.txt) {
           Write-Host anaconda -t token upload -u Turagalab $PATH
         }
       # run: |
