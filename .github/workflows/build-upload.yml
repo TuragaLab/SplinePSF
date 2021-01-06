@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: $GITHUB_REF
+        ref: ${{ github.ref }}
 
     - name: git test
       run: |
