@@ -27,8 +27,9 @@ jobs:
     - name: Build SplinePSF (pip)
       run: |
         cd ./python
-        pip install wheel
         $CONDA/bin/conda env update --file environment.yml
+        $CONDA/bin/conda activate pip-build
+        pip install wheel
         python setup.py bdist_wheel
         ls dist/
 
