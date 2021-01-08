@@ -24,14 +24,11 @@ jobs:
       with:
         python-version: 3.8
     
-    - name: Install conda build libraries
-      # for Linux, we can use the provided conda
-      run: |
-        $CONDA/bin/conda env update --file python/environment.yml
-    
     - name: Build SplinePSF (pip)
       run: |
         cd ./python
+        pip install wheel
+        $CONDA/bin/conda env update --file environment.yml
         python setup.py bdist_wheel
         ls dist/
 
