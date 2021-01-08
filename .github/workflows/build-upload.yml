@@ -1,20 +1,18 @@
 name: Build SplinePSF and upload to Anaconda Cloud
 
 
-# this will be on release at some point
-# on: [push]
-on:
-  release:
-    types: [edited, published]
+# use on: [push] for testing
+on: [push]
+# on:
+#   release:
+#     types: [edited, published]
 
 jobs:
   # --------------- Linux ---------------
-  build-linux:
+
+
+  build-linux-pip:
     runs-on: ubuntu-latest
-
-    env: 
-        FILENAMES: temp-filenames.txt
-
     steps:
     - uses: actions/checkout@v2
       # this grabs the release commit
@@ -29,23 +27,53 @@ jobs:
     - name: Install conda build libraries
       # for Linux, we can use the provided conda
       run: |
-        $CONDA/bin/conda install conda-build anaconda-client
+        $CONDA/bin/conda env update --file python/environment.yml
     
-    - name: Build SplinePSF
-      # build and save the filenames for upload
+    - name: Build SplinePSF (pip)
       run: |
-        cd ./dist_tools/conda
-        $CONDA/bin/conda-build -c conda-forge spline
-        $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
+        cd ./python
+        python setup.py bdist_wheel
+        ls dist/
 
-    - name: Upload to Anaconda Cloud
-      env:
-        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-      run: |
-        cd ./dist_tools/conda
-        while read PATH; do 
-          $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
-        done < $FILENAMES
+
+
+  # build-linux:
+  #   runs-on: ubuntu-latest
+
+  #   env: 
+  #       FILENAMES: temp-filenames.txt
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     # this grabs the release commit
+  #     with:
+  #       ref: ${{ github.ref }}
+
+  #   - name: Python 3.8
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.8
+    
+  #   - name: Install conda build libraries
+  #     # for Linux, we can use the provided conda
+  #     run: |
+  #       $CONDA/bin/conda install conda-build anaconda-client
+    
+  #   - name: Build SplinePSF
+  #     # build and save the filenames for upload
+  #     run: |
+  #       cd ./dist_tools/conda
+  #       $CONDA/bin/conda-build -c conda-forge spline
+  #       $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
+
+  #   - name: Upload to Anaconda Cloud
+  #     env:
+  #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+  #     run: |
+  #       cd ./dist_tools/conda
+  #       while read PATH; do 
+  #         $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+  #       done < $FILENAMES
 
   # --------------- Mac ---------------
   # build-macos:
@@ -96,50 +124,50 @@ jobs:
   #       done < $FILENAMES
 
   # --------------- Windows ---------------
-  build-windows:
-    runs-on: windows-latest
+  # build-windows:
+  #   runs-on: windows-latest
 
-    env: 
-      FILENAMES: temp-filenames.txt
+  #   env: 
+  #     FILENAMES: temp-filenames.txt
 
-    steps:
-    - uses: actions/checkout@v2
-      # this grabs the release commit
-      with:
-        ref: ${{ github.ref }}
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     # this grabs the release commit
+  #     with:
+  #       ref: ${{ github.ref }}
 
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
+  #   - name: Python 3.8
+  #     uses: actions/setup-python@v2
+  #     with:
+  #       python-version: 3.8
     
-    - uses: conda-incubator/setup-miniconda@v2
-      # as with Mac, easier to use the third-party setup
-      with:
-        auto-update-conda: true
-        python-version: 3.8
+  #   - uses: conda-incubator/setup-miniconda@v2
+  #     # as with Mac, easier to use the third-party setup
+  #     with:
+  #       auto-update-conda: true
+  #       python-version: 3.8
 
-    - name: Install conda build libraries
-      shell: powershell
-      run: |
-        conda install conda-build anaconda-client
+  #   - name: Install conda build libraries
+  #     shell: powershell
+  #     run: |
+  #       conda install conda-build anaconda-client
 
-    - name: Build SplinePSF
-      # build and save filenames for upload
-      shell: powershell
-      run: |
-        Set-Location -Path .\dist_tools\conda
-        conda-build -c conda-forge spline
-        conda-build -c conda-forge spline --output > $Env:FILENAMES
+  #   - name: Build SplinePSF
+  #     # build and save filenames for upload
+  #     shell: powershell
+  #     run: |
+  #       Set-Location -Path .\dist_tools\conda
+  #       conda-build -c conda-forge spline
+  #       conda-build -c conda-forge spline --output > $Env:FILENAMES
 
-    - name: Upload to Anaconda Cloud
-      env:
-        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-      shell: powershell
-      run: |
-        Set-PSDebug -Trace 2
-        Set-Location -Path .\dist_tools\conda
-        foreach($PATH in Get-Content -path $Env:FILENAMES) {
-          anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
-        }
-    
+  #   - name: Upload to Anaconda Cloud
+  #     env:
+  #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+  #     shell: powershell
+  #     run: |
+  #       Set-PSDebug -Trace 2
+  #       Set-Location -Path .\dist_tools\conda
+  #       foreach($PATH in Get-Content -path $Env:FILENAMES) {
+  #         anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
+  #       }
+  #   
