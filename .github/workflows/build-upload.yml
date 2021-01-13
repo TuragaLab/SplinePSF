@@ -33,6 +33,8 @@ jobs:
     
     - name: Build SplinePSF (pip)
       run: |
+        conda info
+        conda list
         cd ./python
         pip install wheel
         python setup.py bdist_wheel
