@@ -27,7 +27,7 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: pip-build
-        environment-file: python/example-environment.yml
+        environment-file: python/environment.yml
         python-version: 3.8
         auto-activate-base: false
     
