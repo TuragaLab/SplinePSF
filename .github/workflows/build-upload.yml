@@ -25,11 +25,11 @@ jobs:
         python-version: 3.8
 
     - uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: pip-build
-          environment-file: python/example-environment.yml
-          python-version: 3.8
-          auto-activate-base: false
+      with:
+        activate-environment: pip-build
+        environment-file: python/example-environment.yml
+        python-version: 3.8
+        auto-activate-base: false
     
     - name: Build SplinePSF (pip)
       run: |
