@@ -24,27 +24,17 @@ jobs:
       with:
         python-version: 3.8
 
-    # - uses: conda-incubator/setup-miniconda@v2
-    #   with:
-    #     activate-environment: pip-build
-    #     environment-file: python/environment.yml
-    #     python-version: 3.8
-    #     auto-activate-base: false
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        environment-file: python/environment.yml
-        python-version: 3.8
-
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: pip-build
+        environment-file: python/environment.yml
         python-version: 3.8
         auto-activate-base: false
     
     - name: Build SplinePSF (pip)
       run: |
+        conda activate pip-build
         conda info
-        conda env list
         cd ./python
         pip install wheel
         python setup.py bdist_wheel
