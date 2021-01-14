@@ -33,12 +33,15 @@ jobs:
         activate-environment: pip-build
     
     - name: Build SplinePSF (pip)
+      id: pip-build
       shell: bash -l {0}
       run: |
         cd ./python
         pip install wheel
         python setup.py bdist_wheel
-        ls dist/
+        WHEEL=$(ls dist)
+        echo wheel is $WHEEL
+        echo "::set-output name=wheel_filename::$WHEEL"
 
     - name: Upload to GitHub release
       uses: actions/upload-release-asset@v1
@@ -46,8 +49,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./python/dist
-        asset_name: '*.whl'
+        asset_path: ./python/dist/${{ steps.pip-build.outputs.wheel_filename }}
+        asset_name: ${{ steps.pip-build.outputs.wheel_filename }}
         asset_content_type: binary/octet-stream
 
 
