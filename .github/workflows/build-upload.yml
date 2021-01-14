@@ -32,7 +32,7 @@ jobs:
         activate-environment: pip-build
     
     - name: Build SplinePSF (pip)
-      shell: bash
+      shell: bash -l {0}
       run: |
         conda info
         conda env list
