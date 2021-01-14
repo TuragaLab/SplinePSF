@@ -2,10 +2,10 @@ name: Build SplinePSF and upload to Anaconda Cloud
 
 
 # use on: [push] for testing
-on: [push]
-# on:
-#   release:
-#     types: [edited, published]
+# on: [push]
+on:
+  release:
+    types: [edited, published]
 
 jobs:
   # --------------- Linux ---------------
@@ -13,6 +13,7 @@ jobs:
 
   build-linux-pip:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
       # this grabs the release commit
@@ -34,13 +35,20 @@ jobs:
     - name: Build SplinePSF (pip)
       shell: bash -l {0}
       run: |
-        conda info
-        conda env list
         cd ./python
         pip install wheel
         python setup.py bdist_wheel
         ls dist/
 
+    - name: Upload to GitHub release
+       uses: actions/upload-release-asset@v1
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       with:
+         upload_url: ${{ github.event.release.upload_url }}
+         asset_path: ./python/dist
+         asset_name: *.whl
+         asset_content_type: binary/octet-stream
 
 
   # build-linux:
