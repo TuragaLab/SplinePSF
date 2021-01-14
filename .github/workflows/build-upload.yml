@@ -41,14 +41,14 @@ jobs:
         ls dist/
 
     - name: Upload to GitHub release
-       uses: actions/upload-release-asset@v1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         upload_url: ${{ github.event.release.upload_url }}
-         asset_path: ./python/dist
-         asset_name: *.whl
-         asset_content_type: binary/octet-stream
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./python/dist
+        asset_name: *.whl
+        asset_content_type: binary/octet-stream
 
 
   # build-linux:
