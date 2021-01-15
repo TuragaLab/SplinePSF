@@ -77,7 +77,7 @@ namespace spline_psf_gpu {
     }
 
     // Create struct and ship it to device
-    auto d_spline_init(const float *h_coeff, int xsize, int ysize, int zsize) -> spline* {
+    auto d_spline_init(const float *h_coeff, int xsize, int ysize, int zsize, int device_ix) -> spline* {
 
         // allocate struct on host and ship it to device later
         // ToDo: C++11ify this
@@ -95,6 +95,8 @@ namespace spline_psf_gpu {
         sp->n_coeff = 64;
 
         int tsize = xsize * ysize * zsize * 64;
+
+        cudaSetDevice(device_ix);
 
         float *d_coeff;
         cudaMalloc(&d_coeff, tsize * sizeof(float));

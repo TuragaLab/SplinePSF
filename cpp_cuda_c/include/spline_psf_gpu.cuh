@@ -43,7 +43,7 @@ namespace spline_psf_gpu {
     //      h_coeff: coefficients on host
     // Returns:
     //      spline*:    pointer to spline struct living on the device (!)
-    auto d_spline_init(const float *h_coeff, int xsize, int ysize, int zsize) -> spline*;
+    auto d_spline_init(const float *h_coeff, int xsize, int ysize, int zsize, int device_ix) -> spline*;
 
 
     // Wrapper function to compute the ROIs on the device.
