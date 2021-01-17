@@ -13,7 +13,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python
-    - cmake >=3.15
+    - cmake =3.15
     - ninja
     - setuptools
 
@@ -21,7 +21,7 @@ requirements:
     - python
     - numpy {{ numpy }}
     - pybind11 >=2.4
-    - cudatoolkit # [linux]
+    - cudatoolkit-dev # [linux]
 
   run:
     - python
