@@ -2,8 +2,9 @@ name: pip-build
 channels:
   - conda-forge
 dependencies:
+  - bump2version
   - python=3.6
-  - cmake >=3.15
+  - cmake >=3.18
   - ninja
   - setuptools
   - numpy
