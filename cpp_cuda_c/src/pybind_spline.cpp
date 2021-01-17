@@ -118,7 +118,7 @@ class PSFWrapperCUDA {
 public:
 
     PSFWrapperCUDA(int coeff_xsize, int coeff_ysize, int coeff_zsize, int roi_size_x_, int roi_size_y_,
-                   py::array_t<float, py::array::f_style | py::array::forcecast> coeff, int device ix) {
+                   py::array_t<float, py::array::f_style | py::array::forcecast> coeff, int device_ix) {
         throw std::runtime_error("Not compiled with CUDA enabled. Please refer to CPU version.");
     }
 };

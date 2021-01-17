@@ -1,12 +1,12 @@
-name: pip-build
+name: spline_dev
 channels:
   - conda-forge
 dependencies:
   - bump2version
-  - python=3.6
-  - cmake >=3.18
+  - python=3.9.1
+  - cmake=3.15
   - ninja
   - setuptools
   - numpy
-  - pybind11 >=2.4
+  - pybind11 >=2.6.1
   - cudatoolkit-dev
