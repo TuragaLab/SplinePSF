@@ -69,7 +69,23 @@ namespace spline_psf_gpu {
             return false;
         }
 
-        if (d_count >= 1) {
+        float min_compute_cap = 3.5;
+
+        bool at_least_one_device = false;
+        for (int i = 0; i < d_count; i++) {
+            cudaDeviceProp prop;
+            cudaGetDeviceProperties(&prop, i);
+
+            float compute_cap = prop.major + prop.minor / 10;
+
+            if (compute_cap >= min_compute_cap) {
+                at_least_one_device = true;
+                break;
+            }
+
+        }
+
+        if (at_least_one_device) {
             return true;
         }
 
