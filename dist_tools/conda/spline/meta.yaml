@@ -1,12 +1,12 @@
 package:
   name: spline
-  version: "0.9.a"
+  version: "0.10.0.alpha.0"
 
 source:
      - path: ../../..
 
 build:
-  number: 3
+  number: 0
 
 requirements:
   build:
@@ -21,7 +21,7 @@ requirements:
     - python
     - numpy {{ numpy }}
     - pybind11 >=2.4
-    - cudatoolkit-dev # [linux]
+    - cudatoolkit # [linux]
 
   run:
     - python
