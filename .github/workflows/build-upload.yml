@@ -180,7 +180,6 @@ jobs:
   #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
   #     shell: powershell
   #     run: |
-  #       Set-PSDebug -Trace 2
   #       Set-Location -Path .\dist_tools\conda
   #       foreach($PATH in Get-Content -path $Env:FILENAMES) {
   #         anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
