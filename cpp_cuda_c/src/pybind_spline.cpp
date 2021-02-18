@@ -54,6 +54,10 @@ class PSFWrapperCUDA : public PSFWrapperBase<spg::spline> {
 
             }
 
+        ~PSFWrapperCUDA() {
+            spg::destructor(psf);
+        }
+
         auto forward_rois(py::array_t<float, py::array::c_style | py::array::forcecast> x,
                         py::array_t<float, py::array::c_style | py::array::forcecast> y,
                         py::array_t<float, py::array::c_style | py::array::forcecast> z,
@@ -135,6 +139,10 @@ public:
 
         psf = spc::initSpline(coeff.data(), coeff_xsize, coeff_ysize, coeff_zsize);
 
+    }
+
+    ~PSFWrapperCPU() {
+        spc::destructor(psf);
     }
 
     auto forward_rois(py::array_t<float, py::array::c_style | py::array::forcecast> x,
