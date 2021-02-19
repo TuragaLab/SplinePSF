@@ -125,6 +125,9 @@ namespace spline_psf_gpu {
         cudaMalloc(&d_sp, sizeof(spline));
         cudaMemcpy(d_sp, sp, sizeof(spline), cudaMemcpyHostToDevice);
 
+        // delete on host
+        free(sp);
+
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) {
             std::stringstream rt_err;
@@ -136,8 +139,22 @@ namespace spline_psf_gpu {
     }
 
     auto destructor(spline *d_sp) -> void {
-        cudaFree(d_sp->coeff);
+
+        // first create host helper to be able to access the pointer to coeff, dereferencing d_sp is illegal
+        spline *sp;
+        sp = (spline*)malloc(sizeof(spline));
+        cudaMemcpy(sp, d_sp, sizeof(spline), cudaMemcpyDeviceToHost);
+
+        cudaFree(sp->coeff);
+        free(sp);
         cudaFree(d_sp);
+
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) {
+            std::stringstream rt_err;
+            rt_err << "Error during destruxtor.\nCode: "<< err << "\nInformation: \n" << cudaGetErrorString(err);
+            throw std::runtime_error(rt_err.str());
+        }
     }
 
 

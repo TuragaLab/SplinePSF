@@ -19,6 +19,11 @@ conda install -c haydnspass -c conda-forge spline
 python setup.py install
 ```
 
+### Buildwheels
+```bash
+python setup.py bdist_wheel
+```
+
 ### Build and Deploy with conda
 ```bash
 # recommended: create a new conda build environment
