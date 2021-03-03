@@ -124,7 +124,7 @@ jobs:
         conda install conda-build anaconda-client
 
     - name: Choose Mac OS SDK
-      run: xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
     - name: Build SplinePSF
       # build and save filenames for upload
