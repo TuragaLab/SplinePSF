@@ -3,93 +3,93 @@ name: Build SplinePSF and upload to Anaconda Cloud
 on: 
   # build on every push or pull request; on release (edit or publish/save,
   #  not create), we'll do an uploads as well
-  push:
-  pull_request: 
+  # push:
+  # pull_request: 
   release:
     types: [edited, published]
 
 jobs:
   # --------------- Linux ---------------
-  # build-linux:
-  #   runs-on: ubuntu-latest
+  build-linux:
+    runs-on: ubuntu-latest
 
-  #   env: 
-  #       FILENAMES: temp-filenames.txt
+    env: 
+        FILENAMES: temp-filenames.txt
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     # this grabs the release commit
-  #     with:
-  #       ref: ${{ github.ref }}
+    steps:
+    - uses: actions/checkout@v2
+      # this grabs the release commit
+      with:
+        ref: ${{ github.ref }}
 
-  #   - name: Python 3.8
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
+    - name: Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
     
-  #   - name: Install conda build libraries
-  #     # for Linux, we can use the provided conda
-  #     run: |
-  #       $CONDA/bin/conda install conda-build anaconda-client
+    - name: Install conda build libraries
+      # for Linux, we can use the provided conda
+      run: |
+        $CONDA/bin/conda install conda-build anaconda-client
     
-  #   - name: Build SplinePSF
-  #     # build and save the filenames for upload
-  #     run: |
-  #       cd ./dist_tools/conda
-  #       $CONDA/bin/conda-build -c conda-forge spline
-  #       $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
+    - name: Build SplinePSF
+      # build and save the filenames for upload
+      run: |
+        cd ./dist_tools/conda
+        $CONDA/bin/conda-build -c conda-forge spline
+        $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
 
-  #   - name: Upload to Anaconda Cloud
-  #     if: github.event.release
-  #     env:
-  #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-  #     run: |
-  #       cd ./dist_tools/conda
-  #       while read PATH; do 
-  #         $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
-  #       done < $FILENAMES
+    - name: Upload to Anaconda Cloud
+      if: github.event.release
+      env:
+        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      run: |
+        cd ./dist_tools/conda
+        while read PATH; do 
+          $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+        done < $FILENAMES
 
-  # build-linux-pip:
-  #   runs-on: ubuntu-latest
+  build-linux-pip:
+    runs-on: ubuntu-latest
 
-  #   if: github.event.release
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     # this grabs the release commit
-  #     with:
-  #       ref: ${{ github.ref }}
+    if: github.event.release
+    steps:
+    - uses: actions/checkout@v2
+      # this grabs the release commit
+      with:
+        ref: ${{ github.ref }}
 
-  #   - name: Python 3.8
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
+    - name: Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
 
-  #   - uses: conda-incubator/setup-miniconda@v2
-  #     with:
-  #       environment-file: python/environment.yml
-  #       python-version: 3.8
-  #       auto-activate-base: false
-  #       activate-environment: pip-build
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        environment-file: python/environment.yml
+        python-version: 3.8
+        auto-activate-base: false
+        activate-environment: pip-build
     
-  #   - name: Build SplinePSF (pip)
-  #     id: pip-build
-  #     shell: bash -l {0}
-  #     run: |
-  #       cd ./python
-  #       pip install wheel
-  #       python setup.py bdist_wheel
-  #       WHEEL=$(ls dist)
-  #       echo "::set-output name=wheel_filename::$WHEEL"
+    - name: Build SplinePSF (pip)
+      id: pip-build
+      shell: bash -l {0}
+      run: |
+        cd ./python
+        pip install wheel
+        python setup.py bdist_wheel
+        WHEEL=$(ls dist)
+        echo "::set-output name=wheel_filename::$WHEEL"
 
-  #   - name: Upload to GitHub release
-  #     uses: actions/upload-release-asset@v1
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #     with:
-  #       upload_url: ${{ github.event.release.upload_url }}
-  #       asset_path: ./python/dist/${{ steps.pip-build.outputs.wheel_filename }}
-  #       asset_name: ${{ steps.pip-build.outputs.wheel_filename }}
-  #       asset_content_type: binary/octet-stream
+    - name: Upload to GitHub release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./python/dist/${{ steps.pip-build.outputs.wheel_filename }}
+        asset_name: ${{ steps.pip-build.outputs.wheel_filename }}
+        asset_content_type: binary/octet-stream
 
 
 
@@ -146,50 +146,50 @@ jobs:
         done < $FILENAMES
 
   # --------------- Windows ---------------
-  # build-windows:
-  #   runs-on: windows-latest
+  build-windows:
+    runs-on: windows-latest
 
-  #   env: 
-  #     FILENAMES: temp-filenames.txt
+    env: 
+      FILENAMES: temp-filenames.txt
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     # this grabs the release commit
-  #     with:
-  #       ref: ${{ github.ref }}
+    steps:
+    - uses: actions/checkout@v2
+      # this grabs the release commit
+      with:
+        ref: ${{ github.ref }}
 
-  #   - name: Python 3.8
-  #     uses: actions/setup-python@v2
-  #     with:
-  #       python-version: 3.8
+    - name: Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
     
-  #   - uses: conda-incubator/setup-miniconda@v2
-  #     # as with Mac, easier to use the third-party setup
-  #     with:
-  #       auto-update-conda: true
-  #       python-version: 3.8
+    - uses: conda-incubator/setup-miniconda@v2
+      # as with Mac, easier to use the third-party setup
+      with:
+        auto-update-conda: true
+        python-version: 3.8
 
-  #   - name: Install conda build libraries
-  #     shell: powershell
-  #     run: |
-  #       conda install conda-build anaconda-client
+    - name: Install conda build libraries
+      shell: powershell
+      run: |
+        conda install conda-build anaconda-client
 
-  #   - name: Build SplinePSF
-  #     # build and save filenames for upload
-  #     shell: powershell
-  #     run: |
-  #       Set-Location -Path .\dist_tools\conda
-  #       conda-build -c conda-forge spline
-  #       conda-build -c conda-forge spline --output > $Env:FILENAMES
+    - name: Build SplinePSF
+      # build and save filenames for upload
+      shell: powershell
+      run: |
+        Set-Location -Path .\dist_tools\conda
+        conda-build -c conda-forge spline
+        conda-build -c conda-forge spline --output > $Env:FILENAMES
 
-  #   - name: Upload to Anaconda Cloud
-  #     if: github.event.release
-  #     env:
-  #       ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-  #     shell: powershell
-  #     run: |
-  #       Set-Location -Path .\dist_tools\conda
-  #       foreach($PATH in Get-Content -path $Env:FILENAMES) {
-  #         anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
-  #       }
+    - name: Upload to Anaconda Cloud
+      if: github.event.release
+      env:
+        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      shell: powershell
+      run: |
+        Set-Location -Path .\dist_tools\conda
+        foreach($PATH in Get-Content -path $Env:FILENAMES) {
+          anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
+        }
     
