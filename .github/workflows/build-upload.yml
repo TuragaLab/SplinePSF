@@ -3,7 +3,7 @@ name: Build SplinePSF and upload to Anaconda Cloud
 on: 
   # build on every push or pull request; on release (edit or publish/save,
   #  not create), we'll do an uploads as well
-  push:
+  # push:
   # pull_request: 
   release:
     types: [edited, published]
@@ -126,7 +126,25 @@ jobs:
     - name: Choose Mac OS SDK
       run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
-    - name: Check paths etc.
+    - name: Build SplinePSF
+      # build and save filenames for upload
+      shell: bash -l {0}
+      run: |
+        cd ./dist_tools/conda
+
+        echo $CONDA
+        echo $PATH
+        which conda
+        which conda-build
+        which anaconda
+
+        conda-build -c conda-forge spline
+        conda-build -c conda-forge spline --output > $FILENAMES
+        
+    - name: Upload to Anaconda Cloud
+      if: github.event.release
+      env:
+        ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
       shell: bash -l {0}
       run: |
         echo $CONDA
@@ -134,25 +152,11 @@ jobs:
         which conda
         which conda-build
         which anaconda
-        
-    # - name: Build SplinePSF
-    #   # build and save filenames for upload
-    #   shell: bash -l {0}
-    #   run: |
-    #     cd ./dist_tools/conda
-    #     conda-build -c conda-forge spline
-    #     conda-build -c conda-forge spline --output > $FILENAMES
 
-    # - name: Upload to Anaconda Cloud
-    #   if: github.event.release
-    #   env:
-    #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-    #   shell: bash -l {0}
-    #   run: |
-    #     cd ./dist_tools/conda
-    #     while read PATH; do 
-    #       anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
-    #     done < $FILENAMES
+        cd ./dist_tools/conda
+        while read PATH; do 
+          anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+        done < $FILENAMES
 
   # --------------- Windows ---------------
   # build-windows:
