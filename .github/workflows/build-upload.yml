@@ -154,8 +154,8 @@ jobs:
         which anaconda
 
         cd ./dist_tools/conda
-        while read PATH; do 
-          anaconda -t $ANACONDA_TOKEN upload -u Turagalab $PATH
+        while read NAME; do 
+          anaconda -t $ANACONDA_TOKEN upload -u Turagalab $NAME
         done < $FILENAMES
 
   # --------------- Windows ---------------
