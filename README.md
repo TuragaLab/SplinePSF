@@ -14,6 +14,15 @@ conda install -c haydnspass -c conda-forge spline
 * C++/CUDA implementation is currently not ready for standalone use
 * Updated: CUDA supports arbitrary ROI size now. ~~CUDA does not support ROIs bigger than 32 x 32 = 1024 pixels (this is due to the maximum number of threads per block). Please refer to the CPU version in this case~~
 
+### Build and Install Python package for Local Use
+```bash
+python setup.py install
+```
+
+### Buildwheels
+```bash
+python setup.py bdist_wheel
+```
 
 ### Build and Deploy with conda
 ```bash

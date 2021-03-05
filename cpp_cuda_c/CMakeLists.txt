@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
-cmake_policy(SET CMP0094 NEW)
+#cmake_policy(SET CMP0094 NEW)
 
 project(SplinePSF LANGUAGES CXX C)
 
@@ -8,14 +8,13 @@ check_language(CUDA)
 
 find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 REQUIRED)
-# find_package(eigen REQUIRED)  # not used atm
 find_package(CUDA)
 
 if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable variable
    enable_language(CUDA)
+   add_compile_definitions(CUDA_ENABLED)
 
    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --gpu-architecture=sm_37")
-   add_compile_definitions(CUDA_ENABLED)
 
 else()
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
@@ -34,7 +33,7 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
    set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON)
-   # set_property(TARGET spline_psf_cu_impl PROPERTY POSITION_INDEPENDENT_CODE ON)
+   # set_property(TARGET spline_psf_cu_impl PROPERTY CUDA_ARCHITECTURES 37 50 72 75)
    # target_compile_options(spline_psf_cu_impl PUBLIC $<$<COMPILE_LANGUAGE:CUDA>:  # seems to be unnecssary but keep the code block for the moment
                         # -rdc=true
                         # --gpu-architecture=sm_50

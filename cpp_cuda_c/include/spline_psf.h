@@ -41,7 +41,7 @@ typedef struct {
 /// \return spline*: pointer to spline struct
 spline *initSpline(const float *coeff, int xsize, int ysize, int zsize);
 
-
+void destructor(spline *sp);
 
 void forward_rois(spline *sp, float *rois, int n_rois, int npx, int npy,
                   const float *xc, const float *yc, const float *zc, const float *phot);

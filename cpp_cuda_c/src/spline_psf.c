@@ -60,6 +60,11 @@ spline *initSpline(const float *coeff, const int xsize, int const ysize, const i
     return sp;
 }
 
+void destructor(spline *sp) {
+    free(sp->coeff);
+    free(sp);
+}
+
 void kernel_computeDelta3D(spline *sp, const float x_delta, const float y_delta, const float z_delta,
                            float *delta_f, float *delta_dxf, float *delta_dyf, float *delta_dzf) {
 
@@ -91,7 +96,7 @@ void kernel_computeDelta3D(spline *sp, const float x_delta, const float y_delta,
 }
 
 void
-kernel_DerivativeSpline(spline *sp, const int xc, const int yc, int zc, const float *theta, float *dudt, float *model, 
+kernel_DerivativeSpline(spline *sp, const int xc, const int yc, int zc, const float *theta, float *dudt, float *model,
                         const float *delta_f, const float *delta_dxf, const float *delta_dyf, const float *delta_dzf, bool add_bg) {
     int i;
     float temp = 0;

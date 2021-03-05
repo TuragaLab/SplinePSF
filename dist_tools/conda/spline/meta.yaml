@@ -1,26 +1,28 @@
 package:
   name: spline
-  version: "0.9.a"
+  version: "0.10.0.alpha.2"
 
 source:
      - path: ../../..
 
 build:
-  number: 3
+  number: 1
+  script_env:
+    - CUDACXX
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python
-    - cmake >=3.15
+    - cmake =3.15
     - ninja
     - setuptools
 
   host:
     - python
     - numpy {{ numpy }}
-    - pybind11 >=2.4
+    - pybind11 >=2.6.1
     - cudatoolkit-dev # [linux]
 
   run:

@@ -38,7 +38,7 @@ class CMakeBuild(build_ext):
         if "CONDA_BUILD" in env:
             # conda build has this variable available
             py_ver = ".".join(env["PY_VER"].split())
-        else: 
+        else:
             # pip build does not
             import sys
             py_ver = sys.version[:3]
@@ -62,7 +62,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='spline',
-    version='0.9.1dev',
+    version='0.10.0.alpha.2',
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension('spline', '../cpp_cuda_c')],
     cmdclass=dict(build_ext=CMakeBuild),
