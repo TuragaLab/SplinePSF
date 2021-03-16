@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - bump2version
-  - python=3.9.1
+  - python=3.7
   - cmake=3.15
   - ninja
   - setuptools
