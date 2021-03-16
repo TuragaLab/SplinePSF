@@ -1,10 +1,10 @@
 name: Build SplinePSF and upload to Anaconda Cloud
 
-on: 
+on:
   # build on every push or pull request; on release (edit or publish/save,
   #  not create), we'll do an uploads as well
   push:
-  pull_request: 
+  pull_request:
   release:
     types: [edited, published]
 
@@ -13,25 +13,17 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
 
-    env: 
+    env:
         FILENAMES: temp-filenames.txt
 
     steps:
     - uses: actions/checkout@v2
-      # this grabs the release commit
-      with:
-        ref: ${{ github.ref }}
 
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    
     - name: Install conda build libraries
       # for Linux, we can use the provided conda
       run: |
         $CONDA/bin/conda install conda-build anaconda-client
-    
+
     - name: Build SplinePSF
       # build and save the filenames for upload
       run: |
@@ -45,32 +37,23 @@ jobs:
         ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
       run: |
         cd ./dist_tools/conda
-        while read NAME; do 
+        while read NAME; do
           $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $NAME
         done < $FILENAMES
 
   build-linux-pip:
     runs-on: ubuntu-latest
 
-    if: github.event.release
     steps:
     - uses: actions/checkout@v2
-      # this grabs the release commit
-      with:
-        ref: ${{ github.ref }}
-
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
 
     - uses: conda-incubator/setup-miniconda@v2
       with:
         environment-file: python/environment.yml
-        python-version: 3.8
+        python-version: 3.7
         auto-activate-base: false
-        activate-environment: pip-build
-    
+        activate-environment: spline_dev
+
     - name: Build SplinePSF (pip)
       id: pip-build
       shell: bash -l {0}
@@ -82,6 +65,7 @@ jobs:
         echo "::set-output name=wheel_filename::$WHEEL"
 
     - name: Upload to GitHub release
+      if: github.event.release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,27 +81,21 @@ jobs:
   build-macos:
     runs-on: macos-latest
 
-    env: 
+    env:
         FILENAMES: temp-filenames.txt
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        ref: workflow-tests
-
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
 
     - uses: conda-incubator/setup-miniconda@v2
-      # for Mac, the built-in conda has permissions issues; 
+      # for Mac, the built-in conda has permissions issues;
       #   we use a third-party action instead; note we need to
       #   use the "bash -l {0}" shell to ensure login files are run
       #   so conda env vars will be set
       with:
         auto-update-conda: true
-        python-version: 3.8
+        python-version: 3.7
+
     - name: Install conda build libraries
       shell: bash -l {0}
       run: |
@@ -140,7 +118,7 @@ jobs:
 
         conda-build -c conda-forge spline
         conda-build -c conda-forge spline --output > $FILENAMES
-        
+
     - name: Upload to Anaconda Cloud
       if: github.event.release
       env:
@@ -154,7 +132,7 @@ jobs:
         which anaconda
 
         cd ./dist_tools/conda
-        while read NAME; do 
+        while read NAME; do
           anaconda -t $ANACONDA_TOKEN upload -u Turagalab $NAME
         done < $FILENAMES
 
@@ -162,25 +140,17 @@ jobs:
   build-windows:
     runs-on: windows-latest
 
-    env: 
+    env:
       FILENAMES: temp-filenames.txt
 
     steps:
     - uses: actions/checkout@v2
-      # this grabs the release commit
-      with:
-        ref: ${{ github.ref }}
 
-    - name: Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    
     - uses: conda-incubator/setup-miniconda@v2
       # as with Mac, easier to use the third-party setup
       with:
         auto-update-conda: true
-        python-version: 3.8
+        python-version: 3.7
 
     - name: Install conda build libraries
       shell: powershell
@@ -205,4 +175,3 @@ jobs:
         foreach($PATH in Get-Content -path $Env:FILENAMES) {
           anaconda -t $Env:ANACONDA_TOKEN upload -u Turagalab $PATH
         }
-    
