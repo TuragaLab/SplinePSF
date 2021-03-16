@@ -52,7 +52,7 @@ jobs:
         environment-file: python/environment.yml
         python-version: 3.7
         auto-activate-base: false
-        activate-environment: pip-build
+        activate-environment: spline_dev
 
     - name: Build SplinePSF (pip)
       id: pip-build
