@@ -7,8 +7,6 @@ source:
 
 build:
   number: 1
-  script_env:
-    - CUDACXX
 
 requirements:
   build:
@@ -38,7 +36,7 @@ requirements:
 
 about:
     home: https://rieslab.de
-    # dev_url: github url 
+    # dev_url: github url
     # doc_url: doc url
     # license: GPL-3.0
     # license_family: GPL
