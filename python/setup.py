@@ -62,7 +62,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='spline',
-    version='0.10.0.rc.1',
+    version='0.10.0.rc.2',
     packages=setuptools.find_packages(),
     ext_modules=[CMakeExtension('spline', '../cpp_cuda_c')],
     cmdclass=dict(build_ext=CMakeBuild),
