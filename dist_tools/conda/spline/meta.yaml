@@ -30,7 +30,7 @@ requirements:
   test:
       source-files:
         - python/test/test_basic.py
-       commands:
+      commands:
         - pytest -s python/test/test_basic.py
 
 about:
