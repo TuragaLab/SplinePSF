@@ -1,0 +1,80 @@
+name: build, upload and lazy test
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [edited, published]
+
+jobs:
+
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+
+    defaults:
+      run:
+        shell: ${{ matrix.shell}}
+
+    env:
+        FILENAMES: temp-filenames.txt
+
+    matrix:
+        include:
+          # Windows2019 & VS 2019 supports 10.1+
+          - os: ubuntu-18.04
+            os_base: ubuntu
+            shell: bash -l {0}
+
+          - os: macos-10.15
+            os_base: macos
+            shell: bash -l {0}
+
+          - os: windows-2019
+            os_base: windows
+            shell: powershell
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.7
+
+    - name: Install conda build libraries
+      shell: bash -l {0}
+      run: |
+        conda install conda-build anaconda-client
+
+      - name: Choose Mac OS SDK
+        if: ${{ matrix.os_base == 'macos'}}
+        run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
+
+      - name: Build SplinePSF (UNIX)
+        if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
+        run: |
+          cd ./dist_tools/conda
+
+          $CONDA/bin/conda-build -c conda-forge spline
+          $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
+
+      - name: Build SplinePSF (Windows)
+        if: ${{ matrix.os_base == 'windows' }}
+        run: |
+          Set-Location -Path .\dist_tools\conda
+          conda-build -c conda-forge spline
+          conda-build -c conda-forge spline --output > $Env:FILENAMES
+
+
+      # - name: Upload to Anaconda Cloud
+      #   if: github.event.release
+      #   env:
+      #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      #   run: |
+      #     cd ./dist_tools/conda
+      #     while read NAME; do
+      #       $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $NAME
+      #     done < $FILENAMES
