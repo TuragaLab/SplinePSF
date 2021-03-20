@@ -45,7 +45,7 @@ jobs:
 
       - name: Install conda build libraries
         run: |
-          conda install conda-build anaconda-client
+          conda install conda-build conda-verify anaconda-client
 
       - name: Choose Mac OS SDK
         if: ${{ matrix.os_base == 'macos'}}
