@@ -44,10 +44,9 @@ jobs:
           auto-update-conda: true
           python-version: 3.7
 
-    - name: Install conda build libraries
-      shell: bash -l {0}
-      run: |
-        conda install conda-build anaconda-client
+      - name: Install conda build libraries
+        run: |
+          conda install conda-build anaconda-client
 
       - name: Choose Mac OS SDK
         if: ${{ matrix.os_base == 'macos'}}
