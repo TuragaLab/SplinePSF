@@ -56,13 +56,14 @@ jobs:
         run: |
           cd ./dist_tools/conda
 
-          $CONDA/bin/conda-build -c conda-forge spline
-          $CONDA/bin/conda-build -c conda-forge spline --output > $FILENAMES
+          conda-build -c conda-forge spline
+          conda-build -c conda-forge spline --output > $FILENAMES
 
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
         run: |
           Set-Location -Path .\dist_tools\conda
+
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
 
