@@ -13,15 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-
-    defaults:
-      run:
-        shell: ${{ matrix.shell}}
-
-    env:
-        FILENAMES: temp-filenames.txt
-
-    matrix:
+      matrix:
         include:
           # Windows2019 & VS 2019 supports 10.1+
           - os: ubuntu-18.04
@@ -35,6 +27,13 @@ jobs:
           - os: windows-2019
             os_base: windows
             shell: powershell
+
+    defaults:
+      run:
+        shell: ${{ matrix.shell}}
+
+    env:
+        FILENAMES: temp-filenames.txt
 
     steps:
       - uses: actions/checkout@v2
