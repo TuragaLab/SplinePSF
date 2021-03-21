@@ -34,6 +34,7 @@ jobs:
 
     env:
         FILENAMES: temp-filenames.txt
+        ANACONDA_LABEL: dev
 
     steps:
       - uses: actions/checkout@v2
@@ -67,13 +68,18 @@ jobs:
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
 
+      - name: Change anaconda label on release
+        if: github.event.release
+        env:
+          ANACONDA_LABEL: main
 
-      # - name: Upload to Anaconda Cloud
-      #   if: github.event.release
-      #   env:
-      #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-      #   run: |
-      #     cd ./dist_tools/conda
-      #     while read NAME; do
-      #       $CONDA/bin/anaconda -t $ANACONDA_TOKEN upload -u Turagalab $NAME
-      #     done < $FILENAMES
+
+      - name: Upload to Anaconda Cloud (UNIX)
+        if: github.event.release
+        env:
+          ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+        run: |
+          cd ./dist_tools/conda
+          while read NAME; do
+            anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} -u turagalab $NAME
+          done < $FILENAMES
