@@ -73,6 +73,10 @@ jobs:
         run: |
           echo "ANACONDA_LABEL=main" >> $GITHUB_ENV
 
+      - name: Change anaconda label on prerelease
+        if: "github.event.release.prerelease"
+        run: |
+          echo "ANACONDA_LABEL=pre" >> $GITHUB_ENV
 
       - name: Upload to Anaconda Cloud (UNIX)
         if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
