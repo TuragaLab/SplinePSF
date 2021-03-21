@@ -21,18 +21,11 @@ requirements:
     - python
     - numpy {{ numpy }}
     - pybind11 >=2.6.1
-    - cudatoolkit-dev # [linux]
 
   run:
     - python
     - {{ pin_compatible('numpy', max_pin='x.x') }}
-    # - cudatoolkit=10.1  # [linux]
 
-  # test:
-  #   requires:
-  #     - pytest
-  #   commands:
-  #     - pytest --pyargs deepsmlm
 
 about:
     home: https://rieslab.de
