@@ -70,8 +70,8 @@ jobs:
 
       - name: Change anaconda label on release
         if: github.event.release
-        env:
-          ANACONDA_LABEL: main
+        run: |
+          echo "ANACONDA_LABEL=main" >> $GITHUB_ENV
 
 
       - name: Upload to Anaconda Cloud (UNIX)
