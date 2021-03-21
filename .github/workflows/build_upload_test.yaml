@@ -79,7 +79,7 @@ jobs:
           echo "ANACONDA_LABEL=pre" >> $GITHUB_ENV
 
       - name: Upload to Anaconda Cloud (UNIX)
-        if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
+        if: ${{ (matrix.os_base == 'ubuntu' || matrix.os_base == 'macos') && ( github.event.release || github.ref == 'refs/heads/master' )}}
         env:
           ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
         run: |
@@ -89,7 +89,7 @@ jobs:
           done < $FILENAMES
 
       - name: Upload to Anaconda Cloud (Windows)
-        if: ${{ matrix.os_base == 'windows' }}
+        if: ${{ matrix.os_base == 'windows' && (github.event.release || github.ref == 'refs/heads/master' )}}
         env:
           ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
         shell: powershell
