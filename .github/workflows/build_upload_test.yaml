@@ -85,7 +85,7 @@ jobs:
         run: |
           cd ./dist_tools/conda
           while read NAME; do
-            anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} -u turagalab $NAME
+            anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $NAME
           done < $FILENAMES
 
       - name: Upload to Anaconda Cloud (Windows)
@@ -96,5 +96,5 @@ jobs:
         run: |
           Set-Location -Path .\dist_tools\conda
           foreach($PATH in Get-Content -path $Env:FILENAMES) {
-            anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} -u turagalab $PATH
+            anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
           }
