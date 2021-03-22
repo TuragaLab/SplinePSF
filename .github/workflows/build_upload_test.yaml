@@ -98,3 +98,37 @@ jobs:
           foreach($PATH in Get-Content -path $Env:FILENAMES) {
             anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
           }
+
+
+  build-linux-pip:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        environment-file: python/environment.yml
+        python-version: 3.7
+        auto-activate-base: false
+        activate-environment: spline_dev
+
+    - name: Build SplinePSF (pip)
+      id: pip-build
+      shell: bash -l {0}
+      run: |
+        cd ./python
+        pip install wheel
+        python setup.py bdist_wheel
+        WHEEL=$(ls dist)
+        echo "::set-output name=wheel_filename::$WHEEL"
+    - name: Upload to GitHub release
+      if: github.event.release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./python/dist/${{ steps.pip-build.outputs.wheel_filename }}
+        asset_name: ${{ steps.pip-build.outputs.wheel_filename }}
+        asset_content_type: binary/octet-stream
