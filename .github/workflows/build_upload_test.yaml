@@ -52,7 +52,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
       - name: "Install CUDA Toolkit"
-        if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
+        if: ${{ matrix.os_base == 'windows' || matrix.os_base == 'ubuntu'}}
         uses: Jimver/cuda-toolkit@v0.1.0
         id: cuda-toolkit
         with:
@@ -68,10 +68,12 @@ jobs:
 
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
+        env:
+          CUDADXX: $env:CUDA_PATH
         run: |
           Set-Location -Path .\dist_tools\conda
 
-          CUDA_TOOLKIT_ROOT_DIR=$env:CUDA_PATH conda-build -c conda-forge spline
+          conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
 
       # - name: Change anaconda label on release
