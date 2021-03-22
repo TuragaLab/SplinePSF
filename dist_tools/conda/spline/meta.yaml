@@ -7,8 +7,6 @@ source:
 
 build:
   number: 1
-  script_env:
-    - CUDACXX
 
 requirements:
   build:
@@ -28,20 +26,14 @@ requirements:
   run:
     - python
     - {{ pin_compatible('numpy', max_pin='x.x') }}
-    # - cudatoolkit=10.1  # [linux]
 
-  # test:
-  #   requires:
-  #     - pytest
-  #   commands:
-  #     - pytest --pyargs deepsmlm
+  test:
+      source-files:
+        - python/test/test_basic.py
+      commands:
+        - pytest -s python/test/test_basic.py
 
 about:
     home: https://rieslab.de
-    # dev_url: github url 
-    # doc_url: doc url
-    # license: GPL-3.0
-    # license_family: GPL
-    # license_file: {{ SRC_DIR }}/LICENSE
     summary: "Cubic Spline PSF Implementation"
     description: "Tbd."
