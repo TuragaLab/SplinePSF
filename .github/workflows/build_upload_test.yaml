@@ -15,8 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Windows2019 & VS 2019 supports 10.1+
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             os_base: ubuntu
             shell: bash -l {0}
 
@@ -53,8 +52,8 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
       - name: "Install CUDA Toolkit"
-        uses: Jimver/cuda-toolkit@v0.1.0
         if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
+        uses: Jimver/cuda-toolkit@v0.1.0
         id: cuda-toolkit
         with:
           cuda: '11.2.2'
@@ -72,36 +71,36 @@ jobs:
         run: |
           Set-Location -Path .\dist_tools\conda
 
-          conda-build -c conda-forge spline
+          CUDA_TOOLKIT_ROOT_DIR=$env:CUDA_PATH conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
 
-      - name: Change anaconda label on release
-        if: github.event.release
-        run: |
-          echo "ANACONDA_LABEL=main" >> $GITHUB_ENV
+      # - name: Change anaconda label on release
+      #   if: github.event.release
+      #   run: |
+      #     echo "ANACONDA_LABEL=main" >> $GITHUB_ENV
 
-      - name: Change anaconda label on prerelease
-        if: "github.event.release.prerelease"
-        run: |
-          echo "ANACONDA_LABEL=pre" >> $GITHUB_ENV
+      # - name: Change anaconda label on prerelease
+      #   if: "github.event.release.prerelease"
+      #   run: |
+      #     echo "ANACONDA_LABEL=pre" >> $GITHUB_ENV
 
-      - name: Upload to Anaconda Cloud (UNIX)
-        if: ${{ (matrix.os_base == 'ubuntu' || matrix.os_base == 'macos') && ( github.event.release || github.ref == 'refs/heads/master' )}}
-        env:
-          ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-        run: |
-          cd ./dist_tools/conda
-          while read NAME; do
-            anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $NAME
-          done < $FILENAMES
+      # - name: Upload to Anaconda Cloud (UNIX)
+      #   if: ${{ (matrix.os_base == 'ubuntu' || matrix.os_base == 'macos') && ( github.event.release || github.ref == 'refs/heads/master' )}}
+      #   env:
+      #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      #   run: |
+      #     cd ./dist_tools/conda
+      #     while read NAME; do
+      #       anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $NAME
+      #     done < $FILENAMES
 
-      - name: Upload to Anaconda Cloud (Windows)
-        if: ${{ matrix.os_base == 'windows' && (github.event.release || github.ref == 'refs/heads/master' )}}
-        env:
-          ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-        shell: powershell
-        run: |
-          Set-Location -Path .\dist_tools\conda
-          foreach($PATH in Get-Content -path $Env:FILENAMES) {
-            anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
-          }
+      # - name: Upload to Anaconda Cloud (Windows)
+      #   if: ${{ matrix.os_base == 'windows' && (github.event.release || github.ref == 'refs/heads/master' )}}
+      #   env:
+      #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      #   shell: powershell
+      #   run: |
+      #     Set-Location -Path .\dist_tools\conda
+      #     foreach($PATH in Get-Content -path $Env:FILENAMES) {
+      #       anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
+      #     }
