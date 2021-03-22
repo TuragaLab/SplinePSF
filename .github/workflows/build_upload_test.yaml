@@ -66,10 +66,13 @@ jobs:
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $FILENAMES
 
+      - name: Set CUDACXX (WINDOWS)
+        if: ${{ matrix.os_base == 'windows'
+        run: |
+          [System.Environment]::SetEnvironmentVariable('CUDACXX', $env:CUDA_PATH, [System.EnvironmentVariableTarget]::User)
+
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
-        env:
-          CUDADXX: $env:CUDA_PATH
         run: |
           Set-Location -Path .\dist_tools\conda
 
