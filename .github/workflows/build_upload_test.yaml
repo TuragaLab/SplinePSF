@@ -70,7 +70,7 @@ jobs:
       - name: Set CUDACXX (windows)
         if: ${{ matrix.os_base == 'windows' }}
         run: |
-            echo "CUDACXX=$CUDA_PATH\bin\nvcc.exe" >> $GITHUB_ENV
+            echo "CUDACXX=${{ env.CUDA_PATH }}\bin\nvcc.exe" >> $GITHUB_ENV
 
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
