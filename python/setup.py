@@ -49,6 +49,8 @@ class CMakeBuild(build_ext):
         build_args = ['--config', cfg]
         cmake_args = ['-DCMAKE_BUILD_TYPE=' + cfg]
         cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir]
+        if "CONDA_BUILD" in env:
+            cmake_args += [f'-DPython_EXECUTABLE={env["PYTHON"]}']
         cmake_args += [f'-DPYBIND11_PYTHON_VERSION={py_ver}']
         cmake_args += ["-GNinja"]
 
