@@ -67,13 +67,10 @@ jobs:
         with:
           cuda: '11.2.2'
 
-      - name: Set CUDACXX (windows)
-        if: ${{ matrix.os_base == 'windows' }}
-        run: |
-            echo "CUDACXX=${{ env.CUDA_PATH }}\bin\nvcc.exe" >> $GITHUB_ENV
-
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
+        env:
+          CUDACXX: ${{ env.CUDA_PATH }}\bin\nvcc.exe
         run: |
           Set-Location -Path .\dist_tools\conda
 
