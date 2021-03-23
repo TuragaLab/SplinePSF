@@ -28,6 +28,12 @@ requirements:
     - python
     - {{ pin_compatible('numpy', max_pin='x.x') }}
 
+  test:
+    requires:
+      - pytest
+    commands:
+      - pytest
+
 
 about:
     home: https://rieslab.de
