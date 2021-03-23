@@ -1,4 +1,4 @@
-name: cuda check
+name: build, upload and lazy test
 
 on:
   push:
@@ -15,6 +15,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Windows2019 & VS 2019 supports 10.1+
+          - os: ubuntu-18.04
+            os_base: ubuntu
+            shell: bash -l {0}
+
+          - os: macos-10.15
+            os_base: macos
+            shell: bash -l {0}
+
           - os: windows-2019
             os_base: windows
             shell: powershell
@@ -30,17 +39,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: conda-incubator/setup-miniconda@v2
+      with:
+        environment-file: python/environment.yml
+        python-version: 3.7
+        auto-activate-base: false
+        activate-environment: spline_dev
+
+      - name: Choose Mac OS SDK
+        if: ${{ matrix.os_base == 'macos'}}
+        run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
+
       - name: Install CUDA Toolkit (Windows)
-        if: ${{ matrix.os_base == 'windows' }}
+        if: ${{ matrix.os_base == 'windows'}}
         uses: Jimver/cuda-toolkit@v0.1.0
         id: cuda-toolkit
         with:
           cuda: '11.2.2'
 
-      - name: Set CUDACXX (windows)
-        if: ${{ matrix.os_base == 'windows' }}
+      - name: Try CMAKE directly
         run: |
-            echo "CUDACXX=${{ env.CUDA_PATH }}\bin\nvcc.exe" >> $GITHUB_ENV
-
-      - run: |
-          echo $env:CUDACXX
+          cd cpp_cuda_c
+          mkdir build
+          cd build
+          cmake -GNinja ..
+          ninja
