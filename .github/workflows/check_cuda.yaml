@@ -1,0 +1,46 @@
+name: cuda check
+
+on:
+  push:
+  pull_request:
+  release:
+    types: [edited, published]
+
+jobs:
+
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2019
+            os_base: windows
+            shell: powershell
+
+    defaults:
+      run:
+        shell: ${{ matrix.shell}}
+
+    env:
+        FILENAMES: temp-filenames.txt
+        ANACONDA_LABEL: dev
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install CUDA Toolkit (Windows)
+        if: ${{ matrix.os_base == 'windows' }}
+        uses: Jimver/cuda-toolkit@v0.1.0
+        id: cuda-toolkit
+        with:
+          cuda: '11.2.2'
+
+      - name: Set CUDACXX (windows)
+        if: ${{ matrix.os_base == 'windows' }}
+        run: |
+            echo "CUDACXX=${{ env.CUDA_PATH }}\bin\nvcc.exe" >> $GITHUB_ENV
+
+      - run: |
+          echo $env:CUDACXX
