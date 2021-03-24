@@ -72,5 +72,5 @@ jobs:
           cd cpp_cuda_c
           mkdir build
           cd build
-          cmake -GNinja -DCUDACXX="C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin\nvcc.exe" ..
+          cmake -GNinja -DCUDA="C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\bin\nvcc.exe" ..
           ninja
