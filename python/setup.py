@@ -48,8 +48,6 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         cmake_args = ['-DCMAKE_BUILD_TYPE=' + cfg]
-        if "CUDA" in env:
-            cmake_args += [f'-DCUDA={env["CUDA"]}']
         cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir]
         if "CONDA_BUILD" in env:
             cmake_args += [f'-DPython_EXECUTABLE={env["PYTHON"]}']
