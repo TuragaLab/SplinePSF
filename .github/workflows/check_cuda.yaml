@@ -72,5 +72,5 @@ jobs:
           cd cpp_cuda_c
           mkdir build
           cd build
-          cmake -GNinja -DCUDACXX=${{ env.CUDA_PATH }}\bin\nvcc.exe ..
+          cmake -GNinja -DCUDACXX="${{ env.CUDA_PATH }}\bin\nvcc.exe" ..
           ninja
