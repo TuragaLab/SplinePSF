@@ -21,7 +21,8 @@ requirements:
     - python
     - numpy {{ numpy }}
     - pybind11 >=2.6.1
-    - cudatoolkit-dev # [linux]
+    - cudatoolkit-dev  # [linux]
+    - nvcc_win-64 =10.2  # [win]
 
   run:
     - python

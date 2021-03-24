@@ -61,18 +61,13 @@ jobs:
           conda-build -c conda-forge spline --output > $FILENAMES
 
       - name: Install CUDA Toolkit
+        if: ${{ matrix.os_base == 'windows' }}
         uses: Jimver/cuda-toolkit@v0.1.0
         id: cuda-toolkit
         with:
           cuda: '10.2.89'
           method: 'network'
           # sub-packages: '["nvcc", "visual_studio_integration"]'
-
-      - name: Set CUDA ENV variable (Windows)
-        if: ${{ matrix.os_base == 'windows' }}
-        run: |
-          $CUDA_PATH_FORWARD_SLASH = "$env:CUDA_PATH" -replace "\\", "/"
-          echo "CUDA=${{ env.CUDA_PATH_FORWARD_SLASH }}/bin/nvcc.exe" >> $GITHUB_ENV
 
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
