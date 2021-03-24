@@ -88,16 +88,16 @@ jobs:
             anaconda -t $ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $NAME
           done < $FILENAMES
 
-      - name: Upload to Anaconda Cloud (Windows)
-        if: ${{ matrix.os_base == 'windows' && (github.event.release || github.ref == 'refs/heads/master' )}}
-        env:
-          ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
-        shell: powershell
-        run: |
-          Set-Location -Path .\dist_tools\conda
-          foreach($PATH in Get-Content -path $Env:FILENAMES) {
-            anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
-          }
+      # - name: Upload to Anaconda Cloud (Windows)
+      #   if: ${{ matrix.os_base == 'windows' && (github.event.release || github.ref == 'refs/heads/master' )}}
+      #   env:
+      #     ANACONDA_TOKEN: ${{ secrets.TURAGALAB_ANACONDA_TOKEN }}
+      #   shell: powershell
+      #   run: |
+      #     Set-Location -Path .\dist_tools\conda
+      #     foreach($PATH in Get-Content -path $Env:FILENAMES) {
+      #       anaconda -t $Env:ANACONDA_TOKEN upload -l ${{ env.ANACONDA_LABEL }} --force -u turagalab $PATH
+      #     }
 
 
   build-linux-pip:
