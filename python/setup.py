@@ -44,10 +44,12 @@ class CMakeBuild(build_ext):
             py_ver = sys.version[:3]
 
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
-        # self.debug = True
+
         cfg = 'Debug' if self.debug else 'Release'
         build_args = ['--config', cfg]
         cmake_args = ['-DCMAKE_BUILD_TYPE=' + cfg]
+        if "CUDA" in env:
+            cmake_args += [f'-DCUDA={env["CUDA"]}']
         cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir]
         if "CONDA_BUILD" in env:
             cmake_args += [f'-DPython_EXECUTABLE={env["PYTHON"]}']
