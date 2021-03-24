@@ -60,12 +60,13 @@ jobs:
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $FILENAMES
 
-      - name: Install CUDA Toolkit (Windows)
-        if: ${{ matrix.os_base == 'windows'}}
+      - name: Install CUDA Toolkit
         uses: Jimver/cuda-toolkit@v0.1.0
         id: cuda-toolkit
         with:
-          cuda: '11.2.2'
+          cuda: '10.2.89'
+          method: 'network'
+          # sub-packages: '["nvcc", "visual_studio_integration"]'
 
       - name: Set CUDA ENV variable (Windows)
         if: ${{ matrix.os_base == 'windows' }}
