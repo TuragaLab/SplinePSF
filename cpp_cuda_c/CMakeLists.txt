@@ -1,4 +1,4 @@
-make_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 #cmake_policy(SET CMP0094 NEW)
 
 project(SplinePSF LANGUAGES CUDA CXX C)
