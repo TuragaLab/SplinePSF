@@ -1,14 +1,12 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 #cmake_policy(SET CMP0094 NEW)
 
-project(SplinePSF LANGUAGES CXX C)
+project(SplinePSF LANGUAGES CUDA CXX C)
 
 include(CheckLanguage)
 check_language(CUDA)
-
 find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 REQUIRED)
-find_package(CUDA)
 
 if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable variable
    enable_language(CUDA)
@@ -18,7 +16,7 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable 
 
 else()
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
-   You may need to specify its path like \t'export CUDACXX=/usr/local/cuda/bin/nvcc'")
+   You may need to specify its path according to the CMake instructions applicable to this version.")
 
 endif()
 
@@ -33,12 +31,6 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
    set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON)
-   # set_property(TARGET spline_psf_cu_impl PROPERTY CUDA_ARCHITECTURES 37 50 72 75)
-   # target_compile_options(spline_psf_cu_impl PUBLIC $<$<COMPILE_LANGUAGE:CUDA>:  # seems to be unnecssary but keep the code block for the moment
-                        # -rdc=true
-                        # --gpu-architecture=sm_50
-                        # --expt-relaxed-constexpr
-                        # >)
 
    link_directories(/usr/local/cuda/lib64)
    include_directories("${CUDA_INCLUDE_DIRS}")
