@@ -57,6 +57,16 @@ jobs:
         with:
           cuda: '11.2.2'
 
+      - name: WHERE IS NVCC?
+        if: ${{ matrix.os_base == 'windows'}}
+        run: |
+          Get-Command nvcc | Select-Object -ExpandProperty Definition
+
+      - name: WHERE IS NVCC?
+        if: ${{ matrix.os_base == 'macos' || matrix.os_base == 'ubuntu'}}
+        run: |
+          which nvcc
+
       - name: Try CMAKE directly
         run: |
           cd cpp_cuda_c
