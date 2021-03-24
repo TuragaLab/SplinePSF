@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 #cmake_policy(SET CMP0094 NEW)
 
-project(SplinePSF LANGUAGES CUDA CXX C)
+project(SplinePSF LANGUAGES CXX C)
 
 find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 REQUIRED)
+include(CheckLanguage)
+check_language(CUDA)
 
 if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable variable
    enable_language(CUDA)
