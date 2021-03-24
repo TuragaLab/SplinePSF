@@ -72,5 +72,6 @@ jobs:
           cd cpp_cuda_c
           mkdir build
           cd build
-          cmake -GNinja -DCUDACXX="${{ env.CUDA_PATH }}\bin\nvcc.exe" ..
+          $CUDA_PATH_FORWARD_SLASH = "$env:CUDA_PATH" -replace "\\", "/"
+          cmake -GNinja -DCUDACXX="${{ env.CUDA_PATH_FORWARD_SLASH }}/bin/nvcc.exe" ..
           ninja
