@@ -1,6 +1,6 @@
 package:
   name: spline
-  version: "0.10.0.rc.2"
+  version: "0.10.0dev1"
 
 source:
      - path: ../../..
@@ -28,6 +28,8 @@ requirements:
     - {{ pin_compatible('numpy', max_pin='x.x') }}
 
   test:
+      requires:
+        - pytest
       source-files:
         - python/test/test_basic.py
       commands:
