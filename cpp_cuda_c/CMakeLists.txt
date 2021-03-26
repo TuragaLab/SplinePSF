@@ -10,7 +10,7 @@ find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 REQUIRED)
 find_package(CUDAToolkit)
 
-if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable variable
+if(CUDAToolkit_FOUND AND NOT CUDA_DISABLED)  # the latter is a user definable variable
    enable_language(CUDA)
    add_compile_definitions(CUDA_ENABLED)
 
@@ -28,7 +28,7 @@ target_include_directories(spline_psf_cpu_impl PUBLIC include)
 target_compile_features(spline_psf_cpu_impl PUBLIC c_std_99)
 set_property(TARGET spline_psf_cpu_impl PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
+if(CUDAToolkit_FOUND AND NOT CUDA_DISABLED)
    add_library(spline_psf_cu_impl STATIC src/spline_psf_gpu.cu)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
