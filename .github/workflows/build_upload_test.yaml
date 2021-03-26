@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: CMakeError.log
-          path: '**/CMakeError.log'
+          path: '**/python/build/**/Release/CMakeFiles/CMakeError.log'
 
       - name: Change anaconda label on release
         if: github.event.release
