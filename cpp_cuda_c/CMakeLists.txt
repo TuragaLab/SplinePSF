@@ -34,8 +34,8 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
    set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON)
 
-   link_directories(/usr/local/cuda/lib64)
-   include_directories("${CUDA_INCLUDE_DIRS}")
+   # link_directories(/usr/local/cuda/lib64)
+   # include_directories("${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
 
    pybind11_add_module(spline src/pybind_spline.cpp)
    target_link_libraries(spline PRIVATE spline_psf_cu_impl spline_psf_cpu_impl)
