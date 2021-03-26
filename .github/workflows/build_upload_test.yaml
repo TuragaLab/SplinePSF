@@ -58,7 +58,7 @@ jobs:
         with:
           cuda: '11.2.2'
           method: 'network'
-          subPackages: '["nvcc"]'
+          sub-packages: '["nvcc"]'
 
       - name: Build SplinePSF (UNIX)
         if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
