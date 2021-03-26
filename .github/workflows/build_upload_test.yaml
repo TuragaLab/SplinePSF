@@ -81,7 +81,12 @@ jobs:
           path: |
             C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.6/Release/CMakeFiles/CMakeError.log
             C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.6/Release/CMakeFiles/CMakeOutput.log
-            C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin/nvcc.exe
+
+      - name: Upload other CMake error log
+        uses: actions/upload-artifact@v2
+        with:
+          name: Other_CmakeError.log
+          path: |
             **/python/build/**/Release/CMakeFiles/CMakeError.log
             **/python/build/**/Release/CMakeFiles/CMakeOutput.log
 
