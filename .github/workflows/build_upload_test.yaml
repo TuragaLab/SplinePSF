@@ -66,6 +66,11 @@ jobs:
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $FILENAMES
 
+      - name: Print path (Windows)
+        if: ${{ matrix.os_base == 'windows' }}
+        run: |
+          echo $env:PATH
+      
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
         run: |
