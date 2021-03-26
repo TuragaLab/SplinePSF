@@ -65,11 +65,6 @@ jobs:
 
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $FILENAMES
-
-      - name: Print path (Windows)
-        if: ${{ matrix.os_base == 'windows' }}
-        run: |
-          echo $env:PATH
       
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
@@ -78,6 +73,12 @@ jobs:
 
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
+
+      - name: Upload CMake error log
+        uses: actions/upload-artifact@v2
+        with:
+          name: CMakeError.log
+          path: python/build/**/Release/CMakeFiles/CMakeError.log
 
       - name: Change anaconda label on release
         if: github.event.release
