@@ -52,6 +52,14 @@ jobs:
         if: ${{ matrix.os_base == 'macos'}}
         run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
+      - name: Install CUDA (Ubuntu/Windows)
+        if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'windows'}}
+        uses: Jimver/cuda-toolkit@v0.2.1
+        with:
+          cuda: '11.2.2'
+          method: 'network'
+          subPackages: '["nvcc"]'
+
       - name: Build SplinePSF (UNIX)
         if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
         run: |
