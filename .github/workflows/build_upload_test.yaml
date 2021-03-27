@@ -70,7 +70,7 @@ jobs:
         if: ${{ matrix.os_base == 'windows' }}
         run: |
           Set-Location -Path .\dist_tools\conda
-          [System.Environment]::SetEnvironmentVariable('VSCMD_DEBUG','3',[System.EnvironmentVariableTarget]::User)
+          $env:VSCMD_DEBUG=3
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
 
