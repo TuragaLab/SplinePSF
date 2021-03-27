@@ -79,8 +79,8 @@ jobs:
         with:
           name: CMakeError.log
           path: |
-            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.6/Release/CMakeFiles/CMakeError.log
-            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.6/Release/CMakeFiles/CMakeOutput.log
+            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.*/Release/CMakeFiles/CMakeError.log
+            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.*/Release/CMakeFiles/CMakeOutput.log
 
       - name: Upload other CMake error log
         uses: actions/upload-artifact@v2
