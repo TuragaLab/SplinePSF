@@ -70,13 +70,9 @@ jobs:
         if: ${{ matrix.os_base == 'windows' }}
         run: |
           Set-Location -Path .\dist_tools\conda
-
+          [System.Environment]::SetEnvironmentVariable('VSCMD_DEBUG','3',[System.EnvironmentVariableTarget]::User)
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
-
-      - name: List dir
-        run: |
-          Get-ChildItem -Recurse "C:/Miniconda/envs/test/conda-bld/"
 
       - name: Upload CMake error log
         uses: actions/upload-artifact@v2
