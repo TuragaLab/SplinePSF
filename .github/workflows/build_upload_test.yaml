@@ -52,6 +52,12 @@ jobs:
         if: ${{ matrix.os_base == 'macos'}}
         run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
 
+      - name: Install CUDA (Windows)
+        if: ${{matrix.os_base == 'windows'}}
+        uses: Jimver/cuda-toolkit@v0.2.1
+        with:
+          cuda: '11.2.2'
+
       - name: Build SplinePSF (UNIX)
         if: ${{ matrix.os_base == 'ubuntu' || matrix.os_base == 'macos'}}
         run: |
@@ -59,14 +65,30 @@ jobs:
 
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $FILENAMES
-
+      
       - name: Build SplinePSF (Windows)
         if: ${{ matrix.os_base == 'windows' }}
         run: |
           Set-Location -Path .\dist_tools\conda
-
+          $env:VSCMD_DEBUG=3
           conda-build -c conda-forge spline
           conda-build -c conda-forge spline --output > $Env:FILENAMES
+
+      - name: Upload CMake error log
+        uses: actions/upload-artifact@v2
+        with:
+          name: CMakeError.log
+          path: |
+            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.*/Release/CMakeFiles/CMakeError.log
+            C:/Miniconda/envs/test/conda-bld/*/work/python/build/temp.win-amd64-3.*/Release/CMakeFiles/CMakeOutput.log
+
+      - name: Upload other CMake error log
+        uses: actions/upload-artifact@v2
+        with:
+          name: Other_CmakeError.log
+          path: |
+            **/python/build/**/Release/CMakeFiles/CMakeError.log
+            **/python/build/**/Release/CMakeFiles/CMakeOutput.log
 
       - name: Change anaconda label on release
         if: github.event.release

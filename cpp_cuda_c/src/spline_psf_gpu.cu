@@ -522,17 +522,17 @@ auto kernel_roi(spline *sp, float *rois, const int npx, const int npy, const flo
     float phot = phot_[r];
 
     /* Compute delta. Will be the same for all following px */
-    x0 = (int)floor(xc);
+    x0 = (int)floorf(xc);
     x_delta = xc - x0;
 
-    y0 = (int)floor(yc);
+    y0 = (int)floorf(yc);
     y_delta = yc - y0;
 
-    z0 = (int)floor(zc);
+    z0 = (int)floorf(zc);
     z_delta = zc - z0;
 
     int n_threads = min(1024, npx * npy);  // max number of threads per block
-    int n_blocks = ceil(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
+    int n_blocks = ceilf(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
 
     fAt3Dj<<<n_blocks, n_threads>>>(sp, rois, r, npx, npy, x0, y0, z0, phot, x_delta, y_delta, z_delta);
 
@@ -555,17 +555,17 @@ auto kernel_derivative_roi(spline *sp, float *rois, float *drv_rois, const int n
     float bg = bg_[r];
 
     /* Compute delta. Will be the same for all following px */
-    x0 = (int)floor(xc);
+    x0 = (int)floorf(xc);
     x_delta = xc - x0;
 
-    y0 = (int)floor(yc);
+    y0 = (int)floorf(yc);
     y_delta = yc - y0;
 
-    z0 = (int)floor(zc);
+    z0 = (int)floorf(zc);
     z_delta = zc - z0;
 
     int n_threads = min(1024, npx * npy);  // max number of threads per block
-    int n_blocks = ceil(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
+    int n_blocks = ceilf(static_cast<float>(npx * npy) / static_cast<float>(n_threads));
 
     kernel_derivative<<<n_blocks, n_threads>>>(sp, rois, drv_rois, r, npx, npy, x0, y0, z0, phot, bg, x_delta, y_delta, z_delta, add_bg);
 
