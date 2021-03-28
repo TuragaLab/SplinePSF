@@ -69,7 +69,7 @@ namespace spline_psf_gpu {
             return false;
         }
 
-        float min_compute_cap = 3.5;
+        float min_compute_cap = 3.7;
 
         bool at_least_one_device = false;
         for (int i = 0; i < d_count; i++) {
