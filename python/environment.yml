@@ -4,7 +4,7 @@ channels:
 dependencies:
   - bump2version
   - python=3.7
-  - cmake=3.17
+  - cmake=3.19
   - ninja
   - setuptools
   - numpy
