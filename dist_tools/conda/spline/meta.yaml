@@ -13,7 +13,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python
-    - cmake =3.15
+    - cmake =3.21
     - ninja
     - setuptools
 
