@@ -9,18 +9,13 @@ cxx_compiler:
     - gxx                              # [linux]
     - vs2017                           # [win]
 
-# target_platform:
-#     - osx                              # [osx]
-#     - linux-64                         # [linux]
-#     - win-64                           # [win]
-
 c_compiler_version:
-    - 7.3.0                            # [linux]
+    - 9                                # [linux]
     - 9                                # [osx and x86_64]
     - 13                               # [osx and arm64]
 
 cxx_compiler_version:
-    - 7.3.0                            # [linux]
+    - 9                           # [linux]
     - 9                                # [osx and x86_64]
     - 13                               # [osx and arm64]
 
