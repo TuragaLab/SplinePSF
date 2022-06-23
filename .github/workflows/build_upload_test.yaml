@@ -48,6 +48,11 @@ jobs:
         run: |
           conda install conda-build conda-verify anaconda-client
 
+      - uses: Jimver/cuda-toolkit@v0.2.7
+        id: cuda-toolkit
+        with:
+          cuda: '10.1.0'
+
       - name: Choose Mac OS SDK
         if: ${{ matrix.os_base == 'macos'}}
         run: sudo xcode-select --switch /Applications/Xcode_11.5.app/Contents/Developer
