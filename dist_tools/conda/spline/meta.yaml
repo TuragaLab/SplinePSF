@@ -15,7 +15,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - python
-    - cmake =3.21
+    - cmake =3.23
     - ninja
     - setuptools
     - nvcc_linux-64 >=10.1             # [linux]

@@ -14,7 +14,7 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable 
    enable_language(CUDA)
    add_compile_definitions(CUDA_ENABLED)
 
-   set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --gpu-architecture=sm_37")
+   # set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --gpu-architecture=sm_37")
 
 else()
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
@@ -33,6 +33,8 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
    set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON)
+   set_property(TARGET spline_psf_cu_impl PROPERTY CUDA_ARCHITECTURES all)
+
 
    link_directories(/usr/local/cuda/lib64)
    include_directories("${CUDA_INCLUDE_DIRS}")
