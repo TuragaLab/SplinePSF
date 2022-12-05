@@ -9,4 +9,3 @@ dependencies:
   - setuptools
   - numpy
   - pybind11 >=2.6.1
-  - cudatoolkit-dev
