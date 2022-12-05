@@ -109,7 +109,7 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         environment-file: python/environment.yml
-        python-version: 3.7
+        python-version: 3.8
         auto-activate-base: false
         activate-environment: spline_dev
 
