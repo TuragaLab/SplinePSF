@@ -113,6 +113,11 @@ jobs:
         auto-activate-base: false
         activate-environment: spline_dev
 
+    - uses: Jimver/cuda-toolkit@v0.2.8
+      id: cuda-toolkit
+      with:
+        cuda: '11.4.0'
+
     - name: Build SplinePSF (pip)
       id: pip-build
       shell: bash -l {0}
