@@ -30,7 +30,7 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    add_library(spline_psf_cu_impl STATIC src/spline_psf_gpu.cu)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
-   set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON CUDA_ARCHITECTURES "35;50;72;75;80;85;90")
+   set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON CUDA_ARCHITECTURES "50")
 
    link_directories(/usr/local/cuda/lib64)
    include_directories("${CUDA_INCLUDE_DIRS}")

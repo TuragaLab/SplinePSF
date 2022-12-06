@@ -4,8 +4,10 @@ channels:
 dependencies:
   - bump2version
   - python =3.8
+  - numpy =1.19
   - cmake =3.25
   - ninja
   - setuptools
-  - numpy =1.19
   - pybind11 >=2.6.1
+  - gcc =9
+  - gxx =9
