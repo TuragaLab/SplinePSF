@@ -14,6 +14,10 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable 
    enable_language(CUDA)
    add_compile_definitions(CUDA_ENABLED)
 
+   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+      set(CMAKE_CUDA_ARCHITECTURES 35 50 52 60 61 70 75 80 86)
+   endif()
+
 else()
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
    You may need to specify its path according to the CMake instructions applicable to this version.")
@@ -34,7 +38,6 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
       spline_psf_cu_impl
       PROPERTIES CUDA_SEPARABLE_COMPILATION ON
       POSITION_INDEPENDENT_CODE ON
-      CUDA_ARCHITECTURES "50;52;60;61;70;75;80;86"
       )
 
    pybind11_add_module(spline src/pybind_spline.cpp)

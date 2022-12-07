@@ -5,7 +5,7 @@ dependencies:
   - bump2version
   - python =3.8
   - numpy =1.19
-  - cmake =3.25
+  - cmake =3.23
   - ninja
   - setuptools
   - pybind11 =2.6.1
