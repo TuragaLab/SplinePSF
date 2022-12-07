@@ -8,6 +8,6 @@ dependencies:
   - cmake =3.25
   - ninja
   - setuptools
-  - pybind11 >=2.6.1
+  - pybind11 =2.6.1
   - gcc =9
   - gxx =9

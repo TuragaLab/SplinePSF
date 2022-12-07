@@ -30,10 +30,15 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    add_library(spline_psf_cu_impl STATIC src/spline_psf_gpu.cu)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
-   set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON CUDA_ARCHITECTURES "50")
+   set_target_properties(
+      spline_psf_cu_impl
+      PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+      POSITION_INDEPENDENT_CODE ON
+      CUDA_ARCHITECTURES "50;52;60;61;70;75;80;86;89;90"
+      )
 
-   link_directories(/usr/local/cuda/lib64)
-   include_directories("${CUDA_INCLUDE_DIRS}")
+   # link_directories(/usr/local/cuda/lib64)
+   # include_directories("${CUDA_INCLUDE_DIRS}")
 
    pybind11_add_module(spline src/pybind_spline.cpp)
    target_link_libraries(spline PRIVATE spline_psf_cu_impl spline_psf_cpu_impl)
