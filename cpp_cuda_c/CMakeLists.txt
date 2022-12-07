@@ -34,11 +34,8 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
       spline_psf_cu_impl
       PROPERTIES CUDA_SEPARABLE_COMPILATION ON
       POSITION_INDEPENDENT_CODE ON
-      CUDA_ARCHITECTURES "50;52;60;61;70;75;80;86;89;90"
+      CUDA_ARCHITECTURES "50;52;60;61;70;75;80;86"
       )
-
-   # link_directories(/usr/local/cuda/lib64)
-   # include_directories("${CUDA_INCLUDE_DIRS}")
 
    pybind11_add_module(spline src/pybind_spline.cpp)
    target_link_libraries(spline PRIVATE spline_psf_cu_impl spline_psf_cpu_impl)
