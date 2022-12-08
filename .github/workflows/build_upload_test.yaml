@@ -51,7 +51,7 @@ jobs:
       - uses: Jimver/cuda-toolkit@v0.2.7
         id: cuda-toolkit
         with:
-          cuda: '10.1.0'
+          cuda: '11.7.0'
 
       - name: Choose Mac OS SDK
         if: ${{ matrix.os_base == 'macos'}}
