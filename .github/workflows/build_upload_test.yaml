@@ -49,6 +49,7 @@ jobs:
           conda install conda-build conda-verify anaconda-client
 
       - uses: Jimver/cuda-toolkit@v0.2.7
+        if: ${{ matrix.os_base != 'macos' }}
         id: cuda-toolkit
         with:
           cuda: '11.7.0'
