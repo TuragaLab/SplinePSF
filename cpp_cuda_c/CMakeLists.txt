@@ -14,7 +14,9 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable 
    enable_language(CUDA)
    add_compile_definitions(CUDA_ENABLED)
 
-   # set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --gpu-architecture=sm_37")
+   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+      set(CMAKE_CUDA_ARCHITECTURES 35 50 52 60 61 70 75 80 86)
+   endif()
 
 else()
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
@@ -32,12 +34,11 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    add_library(spline_psf_cu_impl STATIC src/spline_psf_gpu.cu)
    target_include_directories(spline_psf_cu_impl PUBLIC include)
    target_compile_features(spline_psf_cu_impl PUBLIC cxx_std_11)
-   set_target_properties(spline_psf_cu_impl PROPERTIES CUDA_SEPARABLE_COMPILATION ON POSITION_INDEPENDENT_CODE ON)
-   set_property(TARGET spline_psf_cu_impl PROPERTY CUDA_ARCHITECTURES all)
-
-
-   link_directories(/usr/local/cuda/lib64)
-   include_directories("${CUDA_INCLUDE_DIRS}")
+   set_target_properties(
+      spline_psf_cu_impl
+      PROPERTIES CUDA_SEPARABLE_COMPILATION ON
+      POSITION_INDEPENDENT_CODE ON
+      )
 
    pybind11_add_module(spline src/pybind_spline.cpp)
    target_link_libraries(spline PRIVATE spline_psf_cu_impl spline_psf_cpu_impl)
