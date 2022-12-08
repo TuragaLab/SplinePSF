@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - bump2version
-  - python =3.10
+  - python  # gh runner will pin automatically
   - numpy =1.21
   - cmake =3.23
   - ninja
