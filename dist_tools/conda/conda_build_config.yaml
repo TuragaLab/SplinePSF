@@ -20,10 +20,10 @@ cxx_compiler_version:
     - 13                               # [osx and arm64]
 
 python:
-    # - 3.8                              # [not osx]
+    - 3.8                              # [not osx]
     - 3.9
     - 3.10
-    - 3.11
+    # - 3.11
 
 numpy:
     - 1.19                             # [not arm64]
