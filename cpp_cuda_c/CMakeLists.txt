@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
-#cmake_policy(SET CMP0094 NEW)
 
 project(SplinePSF LANGUAGES CXX C)
 
@@ -18,7 +17,7 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)  # the latter is a user definable 
       set(CMAKE_CUDA_ARCHITECTURES 35 50 52 60 61 70 75 80 86)
    endif()
 
-else()
+else()  # NO CUDA
    message(WARNING "No CUDA compiler found or disabled by user defined command line variable '-DCUDA_DISABLED=True'.
    You may need to specify its path according to the CMake instructions applicable to this version.")
 
@@ -44,7 +43,6 @@ if(CMAKE_CUDA_COMPILER AND NOT CUDA_DISABLED)
    target_link_libraries(spline PRIVATE spline_psf_cu_impl spline_psf_cpu_impl)
 
 else()  # NO CUDA
-
    pybind11_add_module(spline src/pybind_spline.cpp)
    target_link_libraries(spline PRIVATE spline_psf_cpu_impl)
 
